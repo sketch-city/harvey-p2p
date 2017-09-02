@@ -18,6 +18,7 @@
   "homepage": "https://github.com/sketch-city/harvey-p2p#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-validator": "^4.1.0",
     "express-winston": "^2.4.0",

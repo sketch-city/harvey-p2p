@@ -1,10 +1,15 @@
-const winston = require('winston'),
-    express = require('express'),
+const express = require('express'),
+    winston = require('winston'),
     expressWinston = require('express-winston'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    cookieParser = require('cookie-parser')
+
+
+const twilioRoutes = require('./routes/api/v1/twilio')
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
 
 app.use(expressWinston.logger({
      transports: [
@@ -19,22 +24,12 @@ app.use(expressWinston.logger({
      colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
      ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
    }));
-
+app.use('/api/v1/twilio', twilioRoutes)
 
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
 })
-
-app.post('*', function(req,res){
-  console.log("Test: ", req.body)
-  res.end()
-})
-
-
-
-
-
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')

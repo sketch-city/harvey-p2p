@@ -3,8 +3,18 @@ const express = require('express'),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
   { need } = require('../../../helpers/sheeter')
 
-
-
+const smsText = {
+  english: {
+    language : "english",
+    trigger : "NEED",
+    messages : {
+      step1: "What do you need?",
+      step2: `Can we contact you at PhoneNumberPlaceholder? Reply "YES" or provide alternate number.`,
+      step3: "What is your current zipcode?",
+      stepDone: "Heard, loud and clear."
+    }
+  }
+}
 
 //TODO: DOCUMENT THOSE ARGUEMENTS
 function reply(req,res,opts){
@@ -23,20 +33,20 @@ function reply(req,res,opts){
 }
 
 function step0(req, res){
-  if (req.body.Body.toUpperCase() !== "NEED"){
+  if (req.body.Body.toUpperCase() !== smsText.english.trigger){
     res.end()
     return
   }
   reply(req,res,{
     nextStep:"step1",
-    message:"What do you need?"
+    message: smsText.english.messages.step1
   })
 }
 
 function step1(req, res){
   reply(req,res,{
     nextStep:"step2",
-    message:`Can we contact you at ${req.body.From}? Reply "YES" or provide alternate number.`,
+    message: smsText.english.messages.step2,
     key:"step1info",
     value:req.body.Body
   })
@@ -51,7 +61,7 @@ function step2(req,res){
   }
   reply(req,res,{
     nextStep:"step3",
-    message:"What is your current zipcode?",
+    message:smsText.english.messages.step3,
     key:"step2info",
     value: phoneNumber
   })
@@ -70,7 +80,7 @@ function step3(req,res){
   .then(function(){
     reply(req,res,{
       nextStep: null,
-      message:"Heard, loud and clear."
+      message: smsText.english.messages.stepDone
     })
   })
   .catch(function(error){
@@ -79,7 +89,6 @@ function step3(req,res){
   });
 
 }
-
 
 router.post('/message', function(req,res){
   console.log("body: ", req.body)

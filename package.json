@@ -27,6 +27,7 @@
     "express": "^4.15.4",
     "express-validator": "^4.1.0",
     "express-winston": "^2.4.0",
+    "json-query": "^2.2.2",
     "pg": "^7.2.0",
     "request-promise": "^4.2.1",
     "sequelize": "^4.8.0",

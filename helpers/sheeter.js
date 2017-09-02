@@ -21,7 +21,7 @@ const DATA_TO_SHEET = {
 
 const SOURCES = {
   [PHONE]:  'Phone',
-  [WEB]:    'web'
+  [WEB]:    'Web'
 };
 
 function makeRequestOptions(postType, ...data){

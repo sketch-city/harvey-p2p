@@ -1,35 +1,43 @@
 $(document).ready( function() {
-  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email'];
 
-  $('input[name=Phone]').mask('(000) 000-0000');
-  $('input[name=Zip]').mask('00000');
+  var $tabs = $('.tab-link[data-w-tab]');
 
-  // function to submit needs form
-  $('form').submit(function(event) {
-    event.preventDefault();
-    var $form = $(this);
-    var $submit = $form.find('[type="submit"]');
-    var formData = getFormData($form);
-    var $success = $form.siblings('.w-form-done');
-    var $failure = $form.siblings('.w-form-fail');
+  initForm();
+  initRouting();
 
-    var currentSubmitText = $submit.attr('value');
-    $submit.attr('value', $submit.attr('data-wait'));
+  function initForm(){
+    var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email'];
 
-    $.post($form.attr('action'), formData)
-      .done(function(response) {
-        // TODO: verify success
-        $success.show();
-      })
-      .fail(function(error) {
-        $failure.show();
-      })
-      .always(function(){
-        $form.hide();
-        $form[0].reset();
-        $submit.attr('value', currentSubmitText);
-      });
-  });
+    $('input[name=Phone]').mask('(000) 000-0000');
+    $('input[name=Zip]').mask('00000');
+
+    // function to submit needs form
+    $('form').submit(function(event) {
+      event.preventDefault();
+      var $form = $(this);
+      var $submit = $form.find('[type="submit"]');
+      var formData = getFormData($form);
+      var $success = $form.siblings('.w-form-done');
+      var $failure = $form.siblings('.w-form-fail');
+
+      var currentSubmitText = $submit.attr('value');
+      $submit.attr('value', $submit.attr('data-wait'));
+
+      $.post($form.attr('action'), formData)
+        .done(function(response) {
+          // TODO: verify success
+          $success.show();
+        })
+        .fail(function(error) {
+          $failure.show();
+        })
+        .always(function(){
+          $form.hide();
+          $form[0].reset();
+          $submit.attr('value', currentSubmitText);
+        });
+    });
+  }
 
   function getFormData($form){
     var formDataArray = $form.serializeArray();
@@ -50,6 +58,33 @@ $(document).ready( function() {
     });
 
     return formData;
+  }
+
+  function initRouting(){
+    var dataTabsToRoutes = {
+      'Harvey Victims': 'needs',
+      'Harvey Helpers': 'offers'
+    };
+
+    var routeToTabs = {
+      '$needsTab': $('.tab-link[data-w-tab="Harvey Victims"]'),
+      '$offersTab': $('.tab-link[data-w-tab="Harvey Helpers"]')
+    };
+
+    $tabs.on('click', function(clickEvent){
+      clickEvent.preventDefault();
+      var $this = $(this);
+      page('/' + dataTabsToRoutes[$this.attr('data-w-tab')]);
+    });
+
+    function index(){}
+
+    page('/', index);
+    page('/needs', index);
+    page('/offers', index);
+
+    (routeToTabs['$' + location.pathname.replace(/\//g, '') + 'Tab'] || routeToTabs.$needsTab).trigger('click');
+    page();
   }
 
 });

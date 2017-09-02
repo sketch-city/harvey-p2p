@@ -2,8 +2,9 @@ const express = require('express'),
   router = express.Router(),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
   { need } = require('../../../helpers/sheeter')
+  jsonQuery = require('json-query')
 
-const smsText = {
+const smsText = [{
   english: {
     language : "english",
     trigger : "NEED",
@@ -11,10 +12,21 @@ const smsText = {
       step1: "What do you need?",
       step2: `Can we contact you at PhoneNumberPlaceholder? Reply "YES" or provide alternate number.`,
       step3: "What is your current zipcode?",
-      stepDone: "Heard, loud and clear."
+      stepDone: "Thank you! Someone will be in contact with you to help fill your need."
+    }}
+  },{
+  spanish: {
+    language : "spanish",
+    trigger : "NECESITAR",
+    messages : {
+      step1: "¿Qué necesitas?",
+      step2: `¿Podemos ponernos en contacto con usted en PhoneNumberPlaceholder? Responda "SÍ" o proporcione un número alternativo.`,
+      yes: "SÍ",
+      step3: "¿Cuál es su código postal actual?",
+      stepDone: "¡Gracias! Alguien estará en contacto con usted para ayudar a llenar su necesidad."
     }
   }
-}
+}]
 
 //TODO: DOCUMENT THOSE ARGUEMENTS
 function reply(req,res,opts){
@@ -33,6 +45,11 @@ function reply(req,res,opts){
 }
 
 function step0(req, res){
+  var initmsg = req.body.Body
+  var result = jsonQuery(`smsText[trigger=${initmsg}].language`, {
+  smsText: smsText
+})
+  console.log("jsonQuery", result)
   if (req.body.Body.toUpperCase() !== smsText.english.trigger){
     res.end()
     return

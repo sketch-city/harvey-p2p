@@ -15,7 +15,6 @@ body {
 
 .section {
   overflow: visible;
-  min-height: 75vh;
   padding: 15px 10px;
   background-color: #efefef;
   background-image: none;
@@ -179,10 +178,10 @@ body {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0;
+  -ms-flex: 1 1 0;
+  flex: 1 1 0;
   border-radius: 5px;
   background-color: #fff;
   -webkit-transition: background-color 150ms ease-in, color 200ms ease;
@@ -193,6 +192,8 @@ body {
   text-align: center;
   text-transform: capitalize;
   cursor: pointer;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .button:hover {
@@ -208,11 +209,10 @@ body {
 .button:focus {
   background-color: #ff4363;
   color: #efefef;
+  outline: none;
 }
 
 .button.is-checked {
-  display: block;
-  width: 100%;
   background-color: #ff4363;
   color: #fff;
 }

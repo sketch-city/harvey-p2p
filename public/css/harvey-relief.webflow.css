@@ -512,6 +512,22 @@ body {
   margin-right: 10px;
 }
 
+#map img {
+  max-width: none;
+}
+
+button:focus {
+  outline:0;
+}
+
+textarea {
+  min-height: 125px;
+}
+
+.w-input, .w-select {
+  font-size: 1.25em;
+}
+
 @media (max-width: 991px) {
   .container {
     width: 100%;

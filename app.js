@@ -2,13 +2,18 @@ const express = require('express'),
     winston = require('winston'),
     expressWinston = require('express-winston'),
     bodyParser = require('body-parser'),
-    cookieParser = require('cookie-parser')
+    cookieParser = require('cookie-parser'),
+    serveStatic = require('serve-static'),
+    path = require('path')
 
+require('dotenv').config();
 
 const twilioRoutes = require('./routes/api/v1/twilio')
+const webRoutes = require('./routes/api/v1/web')
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.use(expressWinston.logger({
@@ -25,11 +30,9 @@ app.use(expressWinston.logger({
      ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
    }));
 app.use('/api/v1/twilio', twilioRoutes)
+app.use('/api/v1/web', webRoutes)
 
-
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
+app.use(serveStatic(path.join(__dirname, 'public')))
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')

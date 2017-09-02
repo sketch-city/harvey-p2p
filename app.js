@@ -2,7 +2,9 @@ const express = require('express'),
     winston = require('winston'),
     expressWinston = require('express-winston'),
     bodyParser = require('body-parser'),
-    cookieParser = require('cookie-parser')
+    cookieParser = require('cookie-parser'),
+    serveStatic = require('serve-static'),
+    path = require('path')
 
 
 const twilioRoutes = require('./routes/api/v1/twilio')
@@ -26,10 +28,7 @@ app.use(expressWinston.logger({
    }));
 app.use('/api/v1/twilio', twilioRoutes)
 
-
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
+app.use(serveStatic(path.join(__dirname, 'public')))
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')

@@ -52,9 +52,10 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="./api/v1/web/needs" method="POST">
+              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="/api/v1/web/needs" method="POST">
                 <h1 class="heading-2">Tell us how we can help...</h1>
-                <textarea class="text-field w-input" data-name="Other 2" id="other-2" maxlength="5000" name="other-2" placeholder="List your needs here..." required="required"></textarea>
+                <textarea class="text-field w-input" data-name="Other 2" name="Text_Input" maxlength="5000" placeholder="List your needs here..." required="required"></textarea>
+                <!-- commenting out this check list for now, to simplify needs intake form
                 <div class="w-dyn-list">
                   <div class="collection-list-2 w-dyn-items">
                     <label class="button w-button"><input type="checkbox" value="child-care"><span class="checkbox-span">Child Care</span></label>
@@ -75,7 +76,14 @@
                     <div>No items found.</div>
                   </div>
                 </div>
-                <h1 class="heading-2">Here's how to contact me...</h1><label class="field-label" for="phone-2">Cell Phone</label><input class="text-field w-input" data-name="Phone 2" id="phone-2" maxlength="256" name="phone-2" placeholder="e.g. 713-555-1111" required="required" type="text"><label class="field-label" for="zip-2">Current Zip Code:</label><input class="text-field w-input" data-name="Zip 2" id="zip-2" maxlength="256" name="zip-2" placeholder="e.g. 77004" required="required" type="text"><input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit"></form>
+                -->
+                <h1 class="heading-2">Here's how to contact me...</h1>
+                <label class="field-label" for="phone-2">Cell Phone</label>
+                <input class="text-field w-input" data-name="Phone 2" name="Phone" maxlength="256" placeholder="e.g. 713-555-1111" required="required" type="text">
+                <label class="field-label" for="zip-2">Current Zip Code:</label>
+                <input class="text-field w-input" data-name="Zip 2" name="Zip" maxlength="256" placeholder="e.g. 77004" required="required" type="text">
+                <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
+              </form>
               <div class="w-form-done">
                 <div class="success">Thank you! Your submission has been received!<br>Someone will contact you on your cellphone when a match is found.</div>
               </div>
@@ -90,7 +98,7 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="./api/v1/web/offers" method="POST">
+              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="/api/v1/web/offers" method="POST">
                 <h1 class="heading-2">I can&nbsp;offer...</h1><label class="field-label" for="other">Select as many as you can</label>
                 <div class="filters" id="filters">
                   <div class="button-group w-clearfix">

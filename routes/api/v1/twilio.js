@@ -10,7 +10,11 @@ function reply(req,res,opts){
   if (opts.key !== undefined){
     res.cookie(opts.key, opts.value,{"path":""})
   }
-  res.cookie("step", opts.nextStep,{"path":""})
+  if (opts.nextStep === null){
+    res.clearCookie("step")
+  } else {
+    res.cookie("step", opts.nextStep,{"path":""})
+  }
   const response = new MessagingResponse();
   const message = response.message();
   message.body(opts.message);
@@ -29,20 +33,38 @@ function step0(req, res){
 }
 
 function step1(req, res){
-  //save text to cookie:"step1info:<"info">"
-  //set cookie to "step:step2"
-  //send next message : "can we contact you at req.body.from(phone number text came from)? Reply "YES" or provide alternate number."
+  reply(req,res,{
+    nextStep:"step2",
+    message:`Can we contact you at ${req.body.From}? Reply "YES" or provide alternate number.`,
+    key:"step1info",
+    value:req.body.Body
+  })
 }
 
 function step2(req,res){
-  //If "YES" : Save req.body.from to "step2info:<"info">"
-  //else: Save contact info to "step2info:<"info">"
-  //send next message : "What is your current zipcode?"
+  var phoneNumber
+  if (req.body.Body.toUpperCase() == "YES"){
+    phoneNumber = req.body.From
+  } else {
+    phoneNumber = req.body.Body
+  }
+  reply(req,res,{
+    nextStep:"step3",
+    message:"What is your current zipcode?",
+    key:"step2info",
+    value: phoneNumber
+  })
 }
 
 function step3(req,res){
-  //log to console, in separate lines, the info of <needtxt>, <contactnumber>, <zip>
-  //send "we hear your needs, and will be in contact soon-ish" ?????????????
+  var zipcode = req.body.Body
+  var phoneNumber = req.cookies.step2info
+  var needs = req.cookies.step1info
+  console.log({zipcode,phoneNumber,needs})
+  reply(req,res,{
+    nextStep: null,
+    message:"Heard, loud and clear."
+  })
 }
 
 

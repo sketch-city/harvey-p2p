@@ -1,6 +1,9 @@
 $(document).ready( function() {
   var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email'];
 
+  $('input[name=Phone]').mask('000 000 0000');
+  $('input[name=Zip]').mask('00000');
+
   // function to submit needs form
   $('form').submit(function(event) {
     event.preventDefault();
@@ -12,7 +15,7 @@ $(document).ready( function() {
 
     var currentSubmitText = $submit.attr('value');
     $submit.attr('value', $submit.attr('data-wait'));
-    // return;
+
     $.post($form.attr('action'), formData)
       .done(function(response) {
         // TODO: verify success
@@ -40,7 +43,7 @@ $(document).ready( function() {
       }
       if (expectedKeys.indexOf(entry.name) < 0) {
         formData.Notes = formData.Notes || '';
-        formData.Notes += entry.name + ': ' + entry.value;
+        formData.Notes += (formData.Notes && ', ') + entry.name + ': ' + entry.value;
         return;
       }
       formData[entry.name] = entry.value;
@@ -48,14 +51,5 @@ $(document).ready( function() {
 
     return formData;
   }
-
-//   // change is-checked class on buttons
-//   $('.button-group').each(function( i, buttonGroup ) {
-//     const $buttonGroup = $( buttonGroup );
-//     $buttonGroup.on( 'click', 'button', function() {
-//       $buttonGroup.find('.is-checked').removeClass('is-checked');
-//       $( this ).addClass('is-checked');
-//     });
-//   });
 
 });

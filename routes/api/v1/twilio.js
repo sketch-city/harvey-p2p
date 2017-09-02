@@ -1,7 +1,7 @@
 const express = require('express'),
   router = express.Router(),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
-  { addNeedByPhone } = require('../../../helpers/sheeter')
+  { need } = require('../../../helpers/sheeter')
 
 
 
@@ -62,16 +62,22 @@ function step3(req,res){
   var phoneNumber = req.cookies.step2info
   var needs = req.cookies.step1info
 
-  addNeedByPhone({
+  need.addByPhone({
     Text_Input:   needs,
     Phone:        phoneNumber,
     Zip:          zipcode
+  })
+  .then(function(){
+    reply(req,res,{
+      nextStep: null,
+      message:"Heard, loud and clear."
+    })
+  })
+  .catch(function(error){
+    // TODO error handling
+    next(error);
   });
 
-  reply(req,res,{
-    nextStep: null,
-    message:"Heard, loud and clear."
-  })
 }
 
 

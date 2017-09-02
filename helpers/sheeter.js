@@ -5,22 +5,38 @@ const postOptions = {
   uri: process.env.GOOGLE_SHEET_ENDPOINT
 };
 
-const dataToSheet = {
-  need: 'NEEDS'
+// Just some constants to help keep things standardized.
+const NEED  = 'need';
+const OFFER = 'offer';
+
+const PHONE = 'phone';
+const WEB   = 'web';
+
+// Adds flexbility for one place to update sheet names
+// as needed for different types.
+const DATA_TO_SHEET = {
+  [NEED]:   'NEEDS',
+  [OFFER]:  'OFFERS'
 };
 
-function makeRequestOptions(postType, ...data) {
+const SOURCES = {
+  [PHONE]:  'Phone',
+  [WEB]:    'web'
+};
+
+function makeRequestOptions(postType, ...data){
 
   // Get sheet name based on what is being posted about.
-  // Adds flexbility for one place to update sheet names
-  // as needed for different types.
-  const sheetName = dataToSheet[postType];
+  const sheetName = DATA_TO_SHEET[postType];
 
   // Merge input data objects with sheetName to make
   // one formData object.
   const formData = Object.assign({
     sheet_name: sheetName
   }, ...data);
+
+  // TODO add "schema" validation for formData
+  // i.e. if (! isValid(postType, formData) ) { throw up nicely. }
 
   // Make a new object and assign to merge form data to
   // prevent mutation of postOptions constant.
@@ -32,10 +48,10 @@ function makeRequestOptions(postType, ...data) {
   return requestOptions;
 }
 
-function addNeed(...data) {
+function addToSheet(type, ...data){
 
-  // Make options for need based on data and type.
-  const requestOptions = makeRequestOptions('need', ...data);
+  // Make options based on data and type.
+  const requestOptions = makeRequestOptions(type, ...data);
 
   // Make the request.
   return requestPromise(requestOptions)
@@ -49,18 +65,38 @@ function addNeed(...data) {
     });
 }
 
-// Alias a function for adding with Source set as 'Phone' for formData.
 function addNeedByPhone(...data){
-  return addNeed({
-    Source: 'Phone'
+  return addToSheet(NEED, {
+    Source: SOURCES[PHONE]
   }, ...data);
 }
 
-// Alias a function for adding with Source set as 'Web' for formData.
 function addNeedByWeb(...data){
-  return addNeed({
-    Source: 'Web'
+  return addToSheet(NEED, {
+    Source: SOURCES[WEB]
   }, ...data);
 }
 
-module.exports = { addNeedByPhone, addNeedByWeb };
+function addOfferByPhone(...data){
+  return addToSheet(OFFER, {
+    Source: SOURCES[PHONE]
+  }, ...data);
+}
+
+function addOfferByWeb(...data){
+  return addToSheet(OFFER, {
+    Source: SOURCES[WEB]
+  }, ...data);
+}
+
+const need = {
+  addByPhone:   addNeedByPhone,
+  addByWeb:     addNeedByWeb
+};
+
+const offer = {
+  addByPhone:   addOfferByPhone,
+  addByWeb:     addOfferByWeb
+};
+
+module.exports = { need, offer };

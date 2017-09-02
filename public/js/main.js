@@ -1,7 +1,5 @@
 $(document).ready( function() {
 
-  var $tabs = $('.tab-link[data-w-tab]');
-
   initForm();
   initRouting();
 
@@ -71,7 +69,7 @@ $(document).ready( function() {
       '$offersTab': $('.tab-link[data-w-tab="Harvey Helpers"]')
     };
 
-    $tabs.on('click', function(clickEvent){
+    $('.tab-link').on('click', function(clickEvent){
       clickEvent.preventDefault();
       var $this = $(this);
       page('/' + dataTabsToRoutes[$this.attr('data-w-tab')]);

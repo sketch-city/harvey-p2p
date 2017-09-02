@@ -52,23 +52,24 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form">
-                <h1 class="heading-2">Tell us how we can help...</h1><textarea class="text-field w-input" data-name="Other 2" id="other-2" maxlength="5000" name="other-2" placeholder="List your needs here..." required="required"></textarea>
+              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="./api/v1/web/needs" method="POST">
+                <h1 class="heading-2">Tell us how we can help...</h1>
+                <textarea class="text-field w-input" data-name="Other 2" id="other-2" maxlength="5000" name="other-2" placeholder="List your needs here..." required="required"></textarea>
                 <div class="w-dyn-list">
                   <div class="collection-list-2 w-dyn-items">
-                    <input type="button" value="Child Care" class="button w-button">
-                    <input type="button" value="Clean-Up" class="button w-button">
-                    <input type="button" value="Clothing" class="button w-button">
-                    <input type="button" value="Demolition" class="button w-button">
-                    <input type="button" value="Food" class="button w-button">
-                    <input type="button" value="Housing" class="button w-button">
-                    <input type="button" value="Insurance Aid" class="button w-button">
-                    <input type="button" value="Medical Care" class="button w-button">
-                    <input type="button" value="Medicine" class="button w-button">
-                    <input type="button" value="Pet Care" class="button w-button">
-                    <input type="button" value="Transportation" class="button w-button">
-                    <input type="button" value="Volunteer Time" class="button w-button">
-                    <input type="button" value="Water" class="button w-button">
+                    <label class="button w-button"><input type="checkbox" value="child-care"><span class="checkbox-span">Child Care</span></label>
+                    <label class="button w-button"><input type="checkbox" value="clean-up"><span class="checkbox-span">Clean Up</span></label>
+                    <label class="button w-button"><input type="checkbox" value="clothing"><span class="checkbox-span">Clothing</span></label>
+                    <label class="button w-button"><input type="checkbox" value="demolition"><span class="checkbox-span">Demolition</span></label>
+                    <label class="button w-button"><input type="checkbox" value="food"><span class="checkbox-span">Food</span></label>
+                    <label class="button w-button"><input type="checkbox" value="housing"><span class="checkbox-span">Housing</span></label>
+                    <label class="button w-button"><input type="checkbox" value="insurance-help"><span class="checkbox-span">Insurance Help</span></label>
+                    <label class="button w-button"><input type="checkbox" value="medical-care"><span class="checkbox-span">Medical Care</span></label>
+                    <label class="button w-button"><input type="checkbox" value="medicine"><span class="checkbox-span">Medicine</span></label>
+                    <label class="button w-button"><input type="checkbox" value="pet-care"><span class="checkbox-span">Pet Care</span></label>
+                    <label class="button w-button"><input type="checkbox" value="transportation"><span class="checkbox-span">Transportation</span></label>
+                    <label class="button w-button"><input type="checkbox" value="volunteer"><span class="checkbox-span">Volunteers</span></label>
+                    <label class="button w-button"><input type="checkbox" value="water"><span class="checkbox-span">Water</span></label>
                   </div>
                   <div class="w-dyn-empty" style="display: none">
                     <div>No items found.</div>
@@ -89,27 +90,26 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form">
+              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="./api/v1/web/offers" method="POST">
                 <h1 class="heading-2">I can&nbsp;offer...</h1><label class="field-label" for="other">Select as many as you can</label>
                 <div class="filters" id="filters">
                   <div class="button-group w-clearfix">
                     <div class="filters-wrap">
                       <div class="collection-list-wrapper w-dyn-list">
                         <div class="collection-list-2 w-dyn-items">
-                          <input type="button" value="All" class="button w-button">
-                          <input type="button" value="Child Care" class="button w-button">
-                          <input type="button" value="Clean-Up" class="button w-button">
-                          <input type="button" value="Clothing" class="button w-button">
-                          <input type="button" value="Demolition" class="button w-button">
-                          <input type="button" value="Food" class="button w-button">
-                          <input type="button" value="Housing" class="button w-button">
-                          <input type="button" value="Insurance Aid" class="button w-button">
-                          <input type="button" value="Medical Care" class="button w-button">
-                          <input type="button" value="Medicine" class="button w-button">
-                          <input type="button" value="Pet Care" class="button w-button">
-                          <input type="button" value="Transportation" class="button w-button">
-                          <input type="button" value="Volunteer Time" class="button w-button">
-                          <input type="button" value="Water" class="button w-button">
+                          <label class="button w-button"><input type="checkbox" value="child-care"><span class="checkbox-span">Child Care</span></label>
+                          <label class="button w-button"><input type="checkbox" value="clean-up"><span class="checkbox-span">Clean Up</span></label>
+                          <label class="button w-button"><input type="checkbox" value="clothing"><span class="checkbox-span">Clothing</span></label>
+                          <label class="button w-button"><input type="checkbox" value="demolition"><span class="checkbox-span">Demolition</span></label>
+                          <label class="button w-button"><input type="checkbox" value="food"><span class="checkbox-span">Food</span></label>
+                          <label class="button w-button"><input type="checkbox" value="housing"><span class="checkbox-span">Housing</span></label>
+                          <label class="button w-button"><input type="checkbox" value="insurance-help"><span class="checkbox-span">Insurance Help</span></label>
+                          <label class="button w-button"><input type="checkbox" value="medical-care"><span class="checkbox-span">Medical Care</span></label>
+                          <label class="button w-button"><input type="checkbox" value="medicine"><span class="checkbox-span">Medicine</span></label>
+                          <label class="button w-button"><input type="checkbox" value="pet-care"><span class="checkbox-span">Pet Care</span></label>
+                          <label class="button w-button"><input type="checkbox" value="transportation"><span class="checkbox-span">Transportation</span></label>
+                          <label class="button w-button"><input type="checkbox" value="volunteer"><span class="checkbox-span">Volunteering</span></label>
+                          <label class="button w-button"><input type="checkbox" value="water"><span class="checkbox-span">Water</span></label>
                         </div>
                         <div class="w-dyn-empty" style="display:none">
                           <div>No items found.</div>
@@ -162,18 +162,18 @@
   <script src="https://npmcdn.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
   <script>
 // document ready wrapper
-$(document).ready( function() {
+// $(document).ready( function() {
   
 
-  // change is-checked class on buttons
-  $('.button-group').each(function( i, buttonGroup ) {
-    const $buttonGroup = $( buttonGroup );
-    $buttonGroup.on( 'click', 'button', function() {
-      $buttonGroup.find('.is-checked').removeClass('is-checked');
-      $( this ).addClass('is-checked');
-    });
-  });
-});
+//   // change is-checked class on buttons
+//   $('.button-group').each(function( i, buttonGroup ) {
+//     const $buttonGroup = $( buttonGroup );
+//     $buttonGroup.on( 'click', 'button', function() {
+//       $buttonGroup.find('.is-checked').removeClass('is-checked');
+//       $( this ).addClass('is-checked');
+//     });
+//   });
+// });
 </script>
 </body>
 </html>

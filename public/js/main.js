@@ -1,7 +1,7 @@
 $(document).ready( function() {
   var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email'];
 
-  $('input[name=Phone]').mask('000 000 0000');
+  $('input[name=Phone]').mask('(000) 000-0000');
   $('input[name=Zip]').mask('00000');
 
   // function to submit needs form

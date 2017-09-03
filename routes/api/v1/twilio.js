@@ -1,10 +1,12 @@
 const express = require('express'),
   router = express.Router(),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
-  { need } = require('../../../helpers/sheeter')
-  jsonQuery = require('json-query')
+  { need } = require('../../../helpers/sheeter'),
+  jsonQuery = require('json-query'),
+  debug = require('debug')('sms')
 
-const smsText = [{
+const smsText = [
+  {
     language : "english",
     trigger : "NEED",
     messages : {
@@ -16,6 +18,7 @@ const smsText = [{
   },{
     language : "spanish",
     trigger : "NECESITAR",
+    //triggers : ["NECESITAR", "NECESITO"],
     messages : {
       step1: "¿Qué necesitas?",
       step2: `¿Podemos ponernos en contacto con usted en PhoneNumberPlaceholder? Responda "SÍ" o proporcione un número alternativo.`,
@@ -23,9 +26,20 @@ const smsText = [{
       step3: "¿Cuál es su código postal actual?",
       stepDone: "¡Gracias! Alguien estará en contacto con usted para ayudar a llenar su necesidad."
     }
-  }];
+  }
+]
 
-//TODO: DOCUMENT THOSE ARGUEMENTS
+/**
+ * Send an SMS reply, including storing some data in a cookie, if provided
+ * req Express request object
+ * res Express response object
+ * opts Object
+ * opts.message Message body to send as SMS
+ * opts.nextStep Name of next step. Will be stored as 'step' cookie. Set to null
+ *   to clear this cookie, resetting the conversation
+ * opts.key (optional) Cookie name to store
+ * opts.value Cookie value to store
+ */
 function reply(req,res,opts){
   if (opts.key !== undefined){
     res.cookie(opts.key, opts.value,{"path":""})
@@ -41,32 +55,83 @@ function reply(req,res,opts){
   res.send(response.toString())
 }
 
+/**
+ * Given a trigger word, select the appropriate language.
+ * Return null if no match found.
+ */
+function getLanguage(initmsg) {
+  var result = jsonQuery(['smsText[trigger=?]', initmsg], {
+    data: {smsText}
+  });
+
+  if (result.value === null) {
+    return null;
+  }
+
+  return result.value.language;
+}
+
+/**
+ * Given a language, return the dictionary of strings stored for that language.
+ * Return null if no match found.
+ */
+function getLanguageStrings(language) {
+  var result = jsonQuery(['smsText[language=?]', language], {
+    data: {smsText}
+  });
+
+  debug('getLanguageStrings(' + language + '):', result.value);
+
+  if (result.value === null) {
+    return null;
+  }
+
+  return result.value.messages;
+}
+
+/**
+ * Given a language and a string title, return the string in the requested
+ * language.
+ * Return null if language or string not found.
+ */
+function getLanguageString(language, title) {
+  var strings = getLanguageStrings(language)
+
+  debug('getLanguageString(' + language + ', ' + title + '):', strings[title]);
+
+  if (strings === null) {
+    return null;
+  }
+  return strings[title];
+}
+
+/******************************************************************************/
+// Begin steps in message dialog
+
 function step0(req, res){
   var initmsg = req.body.Body.toUpperCase()
-  var result = jsonQuery(`smsText[trigger=${initmsg}].language`, {
-    data: {smsText}
-  })
-  res.cookie("language", result.value,{"path":""})
-  if (req.body.Body.toUpperCase() !== result.parents[result.parents.length - 1].value.trigger){
-    res.end()
-    return
-  }
+  var language = getLanguage(initmsg)
+  debug('language:', language);
   reply(req,res,{
     nextStep:"step1",
-    message: result.parents[result.parents.length - 1].value.messages.step1,
-  })
+    key: 'language',
+    value: language,
+    message: getLanguageString(language, 'step1')
+  });
 }
 
 function step1(req, res){
+  var language = req.cookies.language
   reply(req,res,{
     nextStep:"step2",
-    message: result.parents[result.parents.length - 1].value.messages.step2,
+    message: getLanguageString(language, 'step2'),
     key:"step1info",
     value:req.body.Body
   })
 }
 
 function step2(req,res){
+  var language = req.cookies.language
   var phoneNumber
   if (req.body.Body.toUpperCase() == "YES"){
     phoneNumber = req.body.From
@@ -75,7 +140,7 @@ function step2(req,res){
   }
   reply(req,res,{
     nextStep:"step3",
-    message:result.parents[result.parents.length - 1].value.messages.step3,
+    message: getLanguageString(language, 'step3'),
     key:"step2info",
     value: phoneNumber
   })
@@ -85,6 +150,7 @@ function step3(req,res){
   var zipcode = req.body.Body
   var phoneNumber = req.cookies.step2info
   var needs = req.cookies.step1info
+  var language = req.cookies.language
 
   need.addByPhone({
     Text_Input:   needs,
@@ -94,19 +160,19 @@ function step3(req,res){
   .then(function(){
     reply(req,res,{
       nextStep: null,
-      message: result.parents[result.parents.length - 1].value.messages.stepDone
+      message: getLanguageString(language, 'stepDone')
     })
   })
   .catch(function(error){
     // TODO error handling
     next(error);
   });
-
 }
 
+// End steps in message dialog
+/******************************************************************************/
+
 router.post('/message', function(req,res){
-  console.log("body: ", req.body)
-  console.log("RequestCookies: ", req.cookies)
   switch (req.cookies.step){
     case undefined:
       return step0(req,res)

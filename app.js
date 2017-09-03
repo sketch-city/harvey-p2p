@@ -39,3 +39,5 @@ app.use('/needs', serveStatic(path.join(__dirname, 'public')))
 app.listen((process.env.PORT || 3000), function () {
   console.log('Example app listening on port!')
 })
+
+module.exports = app;

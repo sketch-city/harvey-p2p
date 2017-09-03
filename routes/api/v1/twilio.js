@@ -5,7 +5,6 @@ const express = require('express'),
   jsonQuery = require('json-query')
 
 const smsText = [{
-  english: {
     language : "english",
     trigger : "NEED",
     messages : {
@@ -13,9 +12,8 @@ const smsText = [{
       step2: `Can we contact you at PhoneNumberPlaceholder? Reply "YES" or provide alternate number.`,
       step3: "What is your current zipcode?",
       stepDone: "Thank you! Someone will be in contact with you to help fill your need."
-    }}
+    }
   },{
-  spanish: {
     language : "spanish",
     trigger : "NECESITAR",
     messages : {
@@ -25,8 +23,7 @@ const smsText = [{
       step3: "¿Cuál es su código postal actual?",
       stepDone: "¡Gracias! Alguien estará en contacto con usted para ayudar a llenar su necesidad."
     }
-  }
-}]
+  }];
 
 //TODO: DOCUMENT THOSE ARGUEMENTS
 function reply(req,res,opts){
@@ -45,25 +42,25 @@ function reply(req,res,opts){
 }
 
 function step0(req, res){
-  var initmsg = req.body.Body
+  var initmsg = req.body.Body.toUpperCase()
   var result = jsonQuery(`smsText[trigger=${initmsg}].language`, {
-  smsText: smsText
-})
-  console.log("jsonQuery", result)
-  if (req.body.Body.toUpperCase() !== smsText.english.trigger){
+    data: {smsText}
+  })
+  res.cookie("language", result.value,{"path":""})
+  if (req.body.Body.toUpperCase() !== result.parents[result.parents.length - 1].value.trigger){
     res.end()
     return
   }
   reply(req,res,{
     nextStep:"step1",
-    message: smsText.english.messages.step1
+    message: result.parents[result.parents.length - 1].value.messages.step1,
   })
 }
 
 function step1(req, res){
   reply(req,res,{
     nextStep:"step2",
-    message: smsText.english.messages.step2,
+    message: result.parents[result.parents.length - 1].value.messages.step2,
     key:"step1info",
     value:req.body.Body
   })
@@ -78,7 +75,7 @@ function step2(req,res){
   }
   reply(req,res,{
     nextStep:"step3",
-    message:smsText.english.messages.step3,
+    message:result.parents[result.parents.length - 1].value.messages.step3,
     key:"step2info",
     value: phoneNumber
   })
@@ -97,7 +94,7 @@ function step3(req,res){
   .then(function(){
     reply(req,res,{
       nextStep: null,
-      message: smsText.english.messages.stepDone
+      message: result.parents[result.parents.length - 1].value.messages.stepDone
     })
   })
   .catch(function(error){

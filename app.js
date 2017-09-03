@@ -1,3 +1,5 @@
+global.__basedir = __dirname;
+
 const express = require('express'),
     winston = require('winston'),
     expressWinston = require('express-winston'),

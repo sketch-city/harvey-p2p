@@ -1,28 +1,34 @@
 const express = require('express'),
   router = express.Router(),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
-  { need } = require('../../../helpers/sheeter'),
   jsonQuery = require('json-query'),
-  debug = require('debug')('sms')
+  debug = require('debug')('sms'),
+  handlebars = require('handlebars'),
+  _ = require('underscore');
+
+const { need } = require(__basedir + '/helpers/sheeter');
 
 const smsText = [
   {
-    language : "english",
+    language : "English",
     trigger : "NEED",
+    yes: "YES",
     messages : {
       step1: "What do you need?",
-      step2: `Can we contact you at PhoneNumberPlaceholder? Reply "YES" or provide alternate number.`,
-      step3: "What is your current zipcode?",
+      step2: handlebars.compile('Can we contact you at {{ phone }}? ' +
+        'Reply "{{ yes }}" or provide alternate number.'),
+      step3: "What is your current zip code?",
       stepDone: "Thank you! Someone will be in contact with you to help fill your need."
     }
   },{
-    language : "spanish",
+    language : "Spanish",
     trigger : "NECESITAR",
     //triggers : ["NECESITAR", "NECESITO"],
+    yes: ["SÍ", "SI"],
     messages : {
       step1: "¿Qué necesitas?",
-      step2: `¿Podemos ponernos en contacto con usted en PhoneNumberPlaceholder? Responda "SÍ" o proporcione un número alternativo.`,
-      yes: "SÍ",
+      step2: handlebars.compile('¿Podemos ponernos en contacto con usted en ' +
+        '{{ phone }}? Responda "{{ yes }}" o proporcione un número alternativo.'),
       step3: "¿Cuál es su código postal actual?",
       stepDone: "¡Gracias! Alguien estará en contacto con usted para ayudar a llenar su necesidad."
     }
@@ -60,7 +66,7 @@ function reply(req,res,opts){
  * Return null if no match found.
  */
 function getLanguageInit(req) {
-  var initmsg = req.body.Body.toUpperCase()
+  var initmsg = req.body.Body.toUpperCase().trim()
   var result = jsonQuery(['smsText[trigger=?]', initmsg], {
     data: {smsText}
   });
@@ -80,6 +86,27 @@ function getLanguageTriggers() {
     data: {smsText}
   });
   return result.value;
+}
+
+/**
+ * Return the word for "yes" in the given language
+ */
+function getLanguageYes(language, returnAll) {
+  var result = jsonQuery(['smsText[language=?]', language], {
+    data: {smsText}
+  });
+
+  if (result.value === null) {
+    return null;
+  }
+
+  var yes = result.value.yes;
+
+  if (_.isArray(yes) && returnAll !== true) {
+    return yes[0];
+  }
+
+  return yes;
 }
 
 /**
@@ -105,7 +132,7 @@ function getLanguageStrings(language) {
  * language.
  * Return null if language or string not found.
  */
-function getLanguageString(language, title) {
+function getLanguageString(language, title, data) {
   var strings = getLanguageStrings(language)
 
   debug('getLanguageString(' + language + ', ' + title + '):', strings[title]);
@@ -113,7 +140,27 @@ function getLanguageString(language, title) {
   if (strings === null) {
     return null;
   }
-  return strings[title];
+
+  var message = strings[title];
+
+  if (typeof message === 'function') {
+    return message(data);
+  }
+
+  return message;
+}
+
+/**
+ *  Determine whether the input is an affirmative response in the given language
+ */
+function matchYes(req, language) {
+  var input = req.body.Body.toUpperCase().trim();
+  var yes = getLanguageYes(language, true);
+  if (_.isArray(yes)) {
+    return _.contains(yes, input);
+  } else {
+    return input === getLanguageYes(language);
+  }
 }
 
 /******************************************************************************/
@@ -140,7 +187,10 @@ function step1(req, res){
   var language = req.cookies.language
   reply(req,res,{
     nextStep:"step2",
-    message: getLanguageString(language, 'step2'),
+    message: getLanguageString(language, 'step2', {
+      phone: req.body.From,
+      yes: getLanguageYes(language)
+    }),
     key:"step1info",
     value:req.body.Body
   })
@@ -149,7 +199,7 @@ function step1(req, res){
 function step2(req,res){
   var language = req.cookies.language
   var phoneNumber
-  if (req.body.Body.toUpperCase() == "YES"){
+  if (matchYes(req, language)){
     phoneNumber = req.body.From
   } else {
     phoneNumber = req.body.Body
@@ -163,10 +213,10 @@ function step2(req,res){
 }
 
 function step3(req,res){
-  var zipcode = req.body.Body
-  var phoneNumber = req.cookies.step2info
-  var needs = req.cookies.step1info
-  var language = req.cookies.language.
+  var zipcode = req.body.Body;
+  var phoneNumber = req.cookies.step2info;
+  var needs = req.cookies.step1info;
+  var language = req.cookies.language;
 
   need.addByPhone({
     Text_Input:   needs,

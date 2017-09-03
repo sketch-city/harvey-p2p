@@ -21,6 +21,7 @@ $(document).ready( function() {
 
       var currentSubmitText = $submit.attr('value');
       $submit.attr('value', $submit.attr('data-wait'));
+      $submit.attr('disabled', true);
 
       $.post($form.attr('action'), formData)
         .done(function(response) {
@@ -34,6 +35,7 @@ $(document).ready( function() {
           $form.hide();
           $form[0].reset();
           $submit.attr('value', currentSubmitText);
+          $submit.attr('disabled', false);
         });
     });
   }

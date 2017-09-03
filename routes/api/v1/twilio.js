@@ -150,12 +150,13 @@ function step3(req,res){
   var zipcode = req.body.Body
   var phoneNumber = req.cookies.step2info
   var needs = req.cookies.step1info
-  var language = req.cookies.language
+  var language = req.cookies.language.
 
   need.addByPhone({
     Text_Input:   needs,
     Phone:        phoneNumber,
-    Zip:          zipcode
+    Zip:          zipcode,
+    Language:     language
   })
   .then(function(){
     reply(req,res,{

@@ -40,7 +40,7 @@
   </div>
   <div class="w-tabs" data-duration-in="150" data-duration-out="150" data-easing="ease-out">
     <div class="container tabs-menu w-tab-menu">
-      <a class="tab-link w--current w-inline-block w-tab-link" data-w-tab="Harvey Victims">
+      <a class="tab-link w-inline-block w-tab-link" data-w-tab="Harvey Victims">
         <div class="text-block-2">I need help.</div>
       </a>
       <a class="tab-link w-inline-block w-tab-link" data-w-tab="Harvey Helpers">
@@ -52,29 +52,38 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form">
-                <h1 class="heading-2">Tell us how we can help...</h1><textarea class="text-field w-input" data-name="Other 2" id="other-2" maxlength="5000" name="other-2" placeholder="List your needs here..." required="required"></textarea>
+              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="./api/v1/web/needs">
+                <h1 class="heading-2">Tell us how we can help...</h1>
+                <textarea class="text-field w-input" data-name="Other 2" id="other-2" name="Text_Input" maxlength="5000" placeholder="List your needs here..." required="required"></textarea>
+                <!-- commenting out this check list for now, to simplify needs intake form
                 <div class="w-dyn-list">
                   <div class="collection-list-2 w-dyn-items">
-                    <input type="button" value="Child Care" class="button w-button">
-                    <input type="button" value="Clean-Up" class="button w-button">
-                    <input type="button" value="Clothing" class="button w-button">
-                    <input type="button" value="Demolition" class="button w-button">
-                    <input type="button" value="Food" class="button w-button">
-                    <input type="button" value="Housing" class="button w-button">
-                    <input type="button" value="Insurance Aid" class="button w-button">
-                    <input type="button" value="Medical Care" class="button w-button">
-                    <input type="button" value="Medicine" class="button w-button">
-                    <input type="button" value="Pet Care" class="button w-button">
-                    <input type="button" value="Transportation" class="button w-button">
-                    <input type="button" value="Volunteer Time" class="button w-button">
-                    <input type="button" value="Water" class="button w-button">
+                    <label class="button w-button"><input type="checkbox" value="child-care"><span class="checkbox-span">Child Care</span></label>
+                    <label class="button w-button"><input type="checkbox" value="clean-up"><span class="checkbox-span">Clean Up</span></label>
+                    <label class="button w-button"><input type="checkbox" value="clothing"><span class="checkbox-span">Clothing</span></label>
+                    <label class="button w-button"><input type="checkbox" value="demolition"><span class="checkbox-span">Demolition</span></label>
+                    <label class="button w-button"><input type="checkbox" value="food"><span class="checkbox-span">Food</span></label>
+                    <label class="button w-button"><input type="checkbox" value="housing"><span class="checkbox-span">Housing</span></label>
+                    <label class="button w-button"><input type="checkbox" value="insurance-help"><span class="checkbox-span">Insurance Help</span></label>
+                    <label class="button w-button"><input type="checkbox" value="medical-care"><span class="checkbox-span">Medical Care</span></label>
+                    <label class="button w-button"><input type="checkbox" value="medicine"><span class="checkbox-span">Medicine</span></label>
+                    <label class="button w-button"><input type="checkbox" value="pet-care"><span class="checkbox-span">Pet Care</span></label>
+                    <label class="button w-button"><input type="checkbox" value="transportation"><span class="checkbox-span">Transportation</span></label>
+                    <label class="button w-button"><input type="checkbox" value="volunteer"><span class="checkbox-span">Volunteers</span></label>
+                    <label class="button w-button"><input type="checkbox" value="water"><span class="checkbox-span">Water</span></label>
                   </div>
                   <div class="w-dyn-empty" style="display: none">
                     <div>No items found.</div>
                   </div>
                 </div>
-                <h1 class="heading-2">Here's how to contact me...</h1><label class="field-label" for="phone-2">Cell Phone</label><input class="text-field w-input" data-name="Phone 2" id="phone-2" maxlength="256" name="phone-2" placeholder="e.g. 713-555-1111" required="required" type="text"><label class="field-label" for="zip-2">Current Zip Code:</label><input class="text-field w-input" data-name="Zip 2" id="zip-2" maxlength="256" name="zip-2" placeholder="e.g. 77004" required="required" type="text"><input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit"></form>
+                -->
+                <h1 class="heading-2">Here's how to contact me...</h1>
+                <label class="field-label" for="phone-2">Cell Phone</label>
+                <input class="text-field w-input" data-name="Phone 2" id="phone-2" name="Phone" maxlength="256" placeholder="e.g. 713 555 1111" required="required" type="text">
+                <label class="field-label" for="zip-2">Current Zip Code:</label>
+                <input class="text-field w-input" data-name="Zip 2" id="zip-2" name="Zip" maxlength="256" placeholder="e.g. 77004" required="required" type="text">
+                <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
+              </form>
               <div class="w-form-done">
                 <div class="success">Thank you! Your submission has been received!<br>Someone will contact you on your cellphone when a match is found.</div>
               </div>
@@ -89,27 +98,26 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form">
+              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="./api/v1/web/offers" method="POST">
                 <h1 class="heading-2">I can&nbsp;offer...</h1><label class="field-label" for="other">Select as many as you can</label>
                 <div class="filters" id="filters">
                   <div class="button-group w-clearfix">
                     <div class="filters-wrap">
                       <div class="collection-list-wrapper w-dyn-list">
                         <div class="collection-list-2 w-dyn-items">
-                          <input type="button" value="All" class="button w-button">
-                          <input type="button" value="Child Care" class="button w-button">
-                          <input type="button" value="Clean-Up" class="button w-button">
-                          <input type="button" value="Clothing" class="button w-button">
-                          <input type="button" value="Demolition" class="button w-button">
-                          <input type="button" value="Food" class="button w-button">
-                          <input type="button" value="Housing" class="button w-button">
-                          <input type="button" value="Insurance Aid" class="button w-button">
-                          <input type="button" value="Medical Care" class="button w-button">
-                          <input type="button" value="Medicine" class="button w-button">
-                          <input type="button" value="Pet Care" class="button w-button">
-                          <input type="button" value="Transportation" class="button w-button">
-                          <input type="button" value="Volunteer Time" class="button w-button">
-                          <input type="button" value="Water" class="button w-button">
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="child-care"><span class="checkbox-span">Child Care</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="clean-up"><span class="checkbox-span">Clean Up</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="clothing"><span class="checkbox-span">Clothing</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="demolition"><span class="checkbox-span">Demolition</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="food"><span class="checkbox-span">Food</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="housing"><span class="checkbox-span">Housing</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="insurance-help"><span class="checkbox-span">Insurance Help</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="medical-care"><span class="checkbox-span">Medical Care</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="medicine"><span class="checkbox-span">Medicine</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="pet-care"><span class="checkbox-span">Pet Care</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="transportation"><span class="checkbox-span">Transportation</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="volunteer"><span class="checkbox-span">Volunteering</span></label>
+                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="water"><span class="checkbox-span">Water</span></label>
                         </div>
                         <div class="w-dyn-empty" style="display:none">
                           <div>No items found.</div>
@@ -119,10 +127,10 @@
                   </div>
                 </div>
                 <label class="field-label" for="other">Other skills or offers:</label>
-                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="other" placeholder="Example Text"></textarea>
+                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" placeholder="Example Text"></textarea>
                 <h1 class="heading-2">I am located...</h1>
                 <label class="field-label" for="phone">Cell Phone</label>
-                <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="phone" placeholder="e.g. 713-555-1111" required="required" type="text">
+                <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="Phone" placeholder="e.g. 713 555 1111" required="required" type="text">
                 <label class="field-label" for="zip">Current Zip Code:</label>
                 <input class="text-field w-input" data-name="Zip" id="zip" maxlength="256" name="Zip" placeholder="e.g. 77004" required="required" type="text">
                 <label class="field-label" for="distance">I can travel:</label>
@@ -153,27 +161,17 @@
   <div class="section-3"></div>
   <div class="footer">
     <div class="container">
-      <div>Created with <span class="text-span">♥</span> <a href="https://twitter.com/sidneyottelohe" target="_blank" class="inline-link">f</a>or Houston.</div>
+      <div>Created with <span class="text-span">♥</span> for Houston.</div>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/html5-history-api/4.2.8/history.min.js"></script>
+  <script type="text/javascript" src="//cdn.rawgit.com/visionmedia/page.js/master/page.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
   <script src="https://npmcdn.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
-  <script>
-// document ready wrapper
-$(document).ready( function() {
-  
-
-  // change is-checked class on buttons
-  $('.button-group').each(function( i, buttonGroup ) {
-    const $buttonGroup = $( buttonGroup );
-    $buttonGroup.on( 'click', 'button', function() {
-      $buttonGroup.find('.is-checked').removeClass('is-checked');
-      $( this ).addClass('is-checked');
-    });
-  });
-});
-</script>
+  <script type="text/javascript" src="./js/main.js"></script>
 </body>
 </html>
+<!-- vim: set ts=2 sw=2 sts=2: -->

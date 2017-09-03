@@ -168,7 +168,6 @@ body {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 100%;
   padding: 10px 20px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
@@ -485,6 +484,10 @@ body {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
   margin-right: -10px;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
@@ -642,5 +645,44 @@ textarea {
     line-height: 90%;
     text-align: center;
   }
+}
+
+/*toggle checkboxes*/
+/* Hide default HTML checkbox */
+.w-button input {display:none;}
+
+label.button{
+  padding:0;
+}
+
+.checkbox-span {
+  width:100%;
+  height: 100%;
+  -webkit-transition: .2s ease-out;
+  transition: .2s ease-out;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0;
+  -ms-flex: 1 1 0;
+  flex: 1 1 0;
+}
+
+input:checked + .checkbox-span {
+  background-color: #ff4363;
+  color:white;
+}
+
+input:checked + .checkbox-span:hover {
+  color:white;
 }
 

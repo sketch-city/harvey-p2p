@@ -24,16 +24,40 @@ const SOURCES = {
   [WEB]:    'Web'
 };
 
+const DEFAULTS = {
+  [NEED]:   {
+    Need_Type: '',
+    Need_Detail: '',
+    Language: 'English',
+    Name: '',
+    Email: '',
+    Matched: 'False',
+    Matched_by: '',
+    Notes: ''
+  },
+  [OFFER]:  {
+    Offer_Type: '',
+    Offer_Detail: '',
+    Language: 'English',
+    Name: '',
+    Email: '',
+    Matched: 'False',
+    Matched_by: '',
+    Notes: ''
+  }
+};
+
 function makeRequestOptions(postType, ...data){
 
   // Get sheet name based on what is being posted about.
   const sheetName = DATA_TO_SHEET[postType];
+  const defaultData = DEFAULTS[postType];
 
   // Merge input data objects with sheetName to make
   // one formData object.
   const formData = Object.assign({
     sheet_name: sheetName
-  }, ...data);
+  }, defaultData, ...data);
 
   // TODO add "schema" validation for formData
   // i.e. if (! isValid(postType, formData) ) { throw up nicely. }

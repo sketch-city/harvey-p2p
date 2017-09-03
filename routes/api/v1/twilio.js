@@ -46,7 +46,7 @@ function reply(req,res,opts){
   }
   if (opts.nextStep === null){
     res.clearCookie("step")
-  } else {
+  } else if (opts.nextStep !== undefined) {
     res.cookie("step", opts.nextStep,{"path":""})
   }
   const response = new MessagingResponse();
@@ -59,7 +59,8 @@ function reply(req,res,opts){
  * Given a trigger word, select the appropriate language.
  * Return null if no match found.
  */
-function getLanguage(initmsg) {
+function getLanguageInit(req) {
+  var initmsg = req.body.Body.toUpperCase()
   var result = jsonQuery(['smsText[trigger=?]', initmsg], {
     data: {smsText}
   });
@@ -69,6 +70,16 @@ function getLanguage(initmsg) {
   }
 
   return result.value.language;
+}
+
+/**
+ * List all valid initial trigger words
+ */
+function getLanguageTriggers() {
+  var result = jsonQuery('smsText[*].trigger', {
+    data: {smsText}
+  });
+  return result.value;
 }
 
 /**
@@ -109,8 +120,13 @@ function getLanguageString(language, title) {
 // Begin steps in message dialog
 
 function step0(req, res){
-  var initmsg = req.body.Body.toUpperCase()
-  var language = getLanguage(initmsg)
+  var language = getLanguageInit(req)
+  if (language === null) {
+    reply(req, res, {
+      message: 'Accepted inputs: ' + getLanguageTriggers().join(', ')
+    });
+    return;
+  }
   debug('language:', language);
   reply(req,res,{
     nextStep:"step1",
@@ -174,6 +190,22 @@ function step3(req,res){
 /******************************************************************************/
 
 router.post('/message', function(req,res){
+  // Check for conversation re-initialization
+  var language = getLanguageInit(req)
+  if (language !== null) {
+    return step0(req, res);
+  }
+
+  // Check for CLEAR command
+  // This may be useful for testing
+  // if (req.body.Body.toUpperCase().trim() === 'CLEAR') {
+  //   reply(req, res, {
+  //     nextStep: null,
+  //     message: 'This dialog has been reset',
+  //   });
+  //   return;
+  // }
+  //
   switch (req.cookies.step){
     case undefined:
       return step0(req,res)

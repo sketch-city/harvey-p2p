@@ -1,19 +1,58 @@
 const express = require('express'),
   router = express.Router(),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
-  { need } = require('../../../helpers/sheeter')
+  jsonQuery = require('json-query'),
+  debug = require('debug')('sms'),
+  handlebars = require('handlebars'),
+  _ = require('underscore');
 
+const { need } = require(__basedir + '/helpers/sheeter');
 
+const smsText = [
+  {
+    language : "English",
+    trigger : "NEED",
+    yes: "YES",
+    messages : {
+      step1: "What do you need?",
+      step2: handlebars.compile('Can we contact you at {{ phone }}? ' +
+        'Reply "{{ yes }}" or provide alternate number.'),
+      step3: "What is your current zip code?",
+      stepDone: "Thank you! Someone will be in contact with you to help fill your need."
+    }
+  },{
+    language : "Spanish",
+    trigger : "NECESITAR",
+    //triggers : ["NECESITAR", "NECESITO"],
+    yes: ["SÍ", "SI"],
+    messages : {
+      step1: "¿Qué necesitas?",
+      step2: handlebars.compile('¿Podemos ponernos en contacto con usted en ' +
+        '{{ phone }}? Responda "{{ yes }}" o proporcione un número alternativo.'),
+      step3: "¿Cuál es su código postal actual?",
+      stepDone: "¡Gracias! Alguien estará en contacto con usted para ayudar a llenar su necesidad."
+    }
+  }
+]
 
-
-//TODO: DOCUMENT THOSE ARGUEMENTS
+/**
+ * Send an SMS reply, including storing some data in a cookie, if provided
+ * req Express request object
+ * res Express response object
+ * opts Object
+ * opts.message Message body to send as SMS
+ * opts.nextStep Name of next step. Will be stored as 'step' cookie. Set to null
+ *   to clear this cookie, resetting the conversation
+ * opts.key (optional) Cookie name to store
+ * opts.value Cookie value to store
+ */
 function reply(req,res,opts){
   if (opts.key !== undefined){
     res.cookie(opts.key, opts.value,{"path":""})
   }
   if (opts.nextStep === null){
     res.clearCookie("step")
-  } else {
+  } else if (opts.nextStep !== undefined) {
     res.cookie("step", opts.nextStep,{"path":""})
   }
   const response = new MessagingResponse();
@@ -22,68 +61,201 @@ function reply(req,res,opts){
   res.send(response.toString())
 }
 
-function step0(req, res){
-  if (req.body.Body.toUpperCase() !== "NEED"){
-    res.end()
-    return
+/**
+ * Given a trigger word, select the appropriate language.
+ * Return null if no match found.
+ */
+function getLanguageInit(req) {
+  var initmsg = req.body.Body.toUpperCase().trim()
+  var result = jsonQuery(['smsText[trigger=?]', initmsg], {
+    data: {smsText}
+  });
+
+  if (result.value === null) {
+    return null;
   }
+
+  return result.value.language;
+}
+
+/**
+ * List all valid initial trigger words
+ */
+function getLanguageTriggers() {
+  var result = jsonQuery('smsText[*].trigger', {
+    data: {smsText}
+  });
+  return result.value;
+}
+
+/**
+ * Return the word for "yes" in the given language
+ */
+function getLanguageYes(language, returnAll) {
+  var result = jsonQuery(['smsText[language=?]', language], {
+    data: {smsText}
+  });
+
+  if (result.value === null) {
+    return null;
+  }
+
+  var yes = result.value.yes;
+
+  if (_.isArray(yes) && returnAll !== true) {
+    return yes[0];
+  }
+
+  return yes;
+}
+
+/**
+ * Given a language, return the dictionary of strings stored for that language.
+ * Return null if no match found.
+ */
+function getLanguageStrings(language) {
+  var result = jsonQuery(['smsText[language=?]', language], {
+    data: {smsText}
+  });
+
+  debug('getLanguageStrings(' + language + '):', result.value);
+
+  if (result.value === null) {
+    return null;
+  }
+
+  return result.value.messages;
+}
+
+/**
+ * Given a language and a string title, return the string in the requested
+ * language.
+ * Return null if language or string not found.
+ */
+function getLanguageString(language, title, data) {
+  var strings = getLanguageStrings(language)
+
+  debug('getLanguageString(' + language + ', ' + title + '):', strings[title]);
+
+  if (strings === null) {
+    return null;
+  }
+
+  var message = strings[title];
+
+  if (typeof message === 'function') {
+    return message(data);
+  }
+
+  return message;
+}
+
+/**
+ *  Determine whether the input is an affirmative response in the given language
+ */
+function matchYes(req, language) {
+  var input = req.body.Body.toUpperCase().trim();
+  var yes = getLanguageYes(language, true);
+  if (_.isArray(yes)) {
+    return _.contains(yes, input);
+  } else {
+    return input === getLanguageYes(language);
+  }
+}
+
+/******************************************************************************/
+// Begin steps in message dialog
+
+function step0(req, res){
+  var language = getLanguageInit(req)
+  if (language === null) {
+    reply(req, res, {
+      message: 'Accepted inputs: ' + getLanguageTriggers().join(', ')
+    });
+    return;
+  }
+  debug('language:', language);
   reply(req,res,{
     nextStep:"step1",
-    message:"What do you need?"
-  })
+    key: 'language',
+    value: language,
+    message: getLanguageString(language, 'step1')
+  });
 }
 
 function step1(req, res){
+  var language = req.cookies.language
   reply(req,res,{
     nextStep:"step2",
-    message:`Can we contact you at ${req.body.From}? Reply "YES" or provide alternate number.`,
+    message: getLanguageString(language, 'step2', {
+      phone: req.body.From,
+      yes: getLanguageYes(language)
+    }),
     key:"step1info",
     value:req.body.Body
   })
 }
 
 function step2(req,res){
+  var language = req.cookies.language
   var phoneNumber
-  if (req.body.Body.toUpperCase() == "YES"){
+  if (matchYes(req, language)){
     phoneNumber = req.body.From
   } else {
     phoneNumber = req.body.Body
   }
   reply(req,res,{
     nextStep:"step3",
-    message:"What is your current zipcode?",
+    message: getLanguageString(language, 'step3'),
     key:"step2info",
     value: phoneNumber
   })
 }
 
 function step3(req,res){
-  var zipcode = req.body.Body
-  var phoneNumber = req.cookies.step2info
-  var needs = req.cookies.step1info
+  var zipcode = req.body.Body;
+  var phoneNumber = req.cookies.step2info;
+  var needs = req.cookies.step1info;
+  var language = req.cookies.language;
 
   need.addByPhone({
     Text_Input:   needs,
     Phone:        phoneNumber,
-    Zip:          zipcode
+    Zip:          zipcode,
+    Language:     language
   })
   .then(function(){
     reply(req,res,{
       nextStep: null,
-      message:"Heard, loud and clear."
+      message: getLanguageString(language, 'stepDone')
     })
   })
   .catch(function(error){
     // TODO error handling
     next(error);
   });
-
 }
 
+// End steps in message dialog
+/******************************************************************************/
 
 router.post('/message', function(req,res){
-  console.log("body: ", req.body)
-  console.log("RequestCookies: ", req.cookies)
+  // Check for conversation re-initialization
+  var language = getLanguageInit(req)
+  if (language !== null) {
+    return step0(req, res);
+  }
+
+  // Check for CLEAR command
+  // This may be useful for testing
+  // if (req.body.Body.toUpperCase().trim() === 'CLEAR') {
+  //   reply(req, res, {
+  //     nextStep: null,
+  //     message: 'This dialog has been reset',
+  //   });
+  //   return;
+  // }
+  //
   switch (req.cookies.step){
     case undefined:
       return step0(req,res)

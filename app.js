@@ -37,6 +37,7 @@ app.use('/api/v1/web', webRoutes)
 app.use(serveStatic(path.join(__dirname, 'public')))
 app.use('/offers', serveStatic(path.join(__dirname, 'public')))
 app.use('/needs', serveStatic(path.join(__dirname, 'public')))
+app.use('/sms', serveStatic(path.join(__dirname, 'public')))
 
 app.listen((process.env.PORT || 3000), function () {
   console.log('Example app listening on port!')

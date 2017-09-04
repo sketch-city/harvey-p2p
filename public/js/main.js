@@ -1,6 +1,6 @@
 $(document).ready( function() {
 
-  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email'];
+  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email', 'Housing'];
 
   initForm();
   initRouting();

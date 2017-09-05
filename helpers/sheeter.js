@@ -1,4 +1,5 @@
 const requestPromise = require('request-promise');
+const uuidv4 = require('uuid/v4');
 
 const postOptions = {
   method: 'POST',
@@ -57,7 +58,8 @@ function makeRequestOptions(postType, ...data){
   // Merge input data objects with sheetName to make
   // one formData object.
   const formData = Object.assign({
-    sheet_name: sheetName
+    sheet_name: sheetName,
+    uuid:       uuidv4()
   }, defaultData, ...data);
 
   // TODO add "schema" validation for formData

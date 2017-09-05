@@ -6,7 +6,8 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     serveStatic = require('serve-static'),
-    path = require('path')
+    path = require('path'),
+    enforce = require('express-sslify');
 
 require('dotenv').config();
 
@@ -14,6 +15,7 @@ const twilioRoutes = require('./routes/api/v1/twilio')
 const webRoutes = require('./routes/api/v1/web')
 const app = express()
 
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())

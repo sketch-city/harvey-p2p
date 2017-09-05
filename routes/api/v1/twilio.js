@@ -202,7 +202,7 @@ function step2(req,res){
   if (matchYes(req, language)){
     phoneNumber = req.body.From
   } else {
-    phoneNumber = req.body.Body
+    phoneNumber = '[' + req.body.From + '] ' + req.body.Body
   }
   reply(req,res,{
     nextStep:"step3",

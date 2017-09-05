@@ -1,6 +1,6 @@
 $(document).ready( function() {
 
-  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email'];
+  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email', 'Housing'];
 
   initForm();
   initRouting();
@@ -64,12 +64,14 @@ $(document).ready( function() {
   function initRouting(){
     var dataTabsToRoutes = {
       'Harvey Victims': 'needs',
-      'Harvey Helpers': 'offers'
+      'Harvey Helpers': 'offers',
+      'Harvey SMS': 'sms'
     };
 
     var routeToTabs = {
       '$needsTab': $('.tab-link[data-w-tab="Harvey Victims"]'),
-      '$offersTab': $('.tab-link[data-w-tab="Harvey Helpers"]')
+      '$offersTab': $('.tab-link[data-w-tab="Harvey Helpers"]'),
+      '$smsTab': $('.tab-link[data-w-tab="Harvey SMS"]')
     };
 
     $('.tab-link').on('click', function(clickEvent){
@@ -83,6 +85,7 @@ $(document).ready( function() {
     page('/', index);
     page('/needs', index);
     page('/offers', index);
+    page('/sms', index);
 
     (routeToTabs['$' + location.pathname.replace(/\//g, '') + 'Tab'] || routeToTabs.$needsTab).trigger('click');
     page();

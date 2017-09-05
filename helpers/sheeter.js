@@ -33,7 +33,8 @@ const DEFAULTS = {
     Email: '',
     Matched: 'False',
     Matched_by: '',
-    Notes: ''
+    Notes: '',
+    Housing: ''
   },
   [OFFER]:  {
     Offer_Type: '',

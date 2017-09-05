@@ -15,7 +15,7 @@ body {
 
 .section {
   overflow: visible;
-  padding: 15px 10px;
+  padding: 30px 10px;
   background-color: #efefef;
   background-image: none;
   background-size: auto;
@@ -413,6 +413,8 @@ body {
   -ms-flex: 1;
   flex: 1;
   text-align: right;
+  color:rgba(0,0,0,0.56);
+  padding-left: 10px;
 }
 
 .collection-list {
@@ -556,12 +558,18 @@ textarea {
   .section-3 {
     min-height: 300px;
   }
-  .tagline {
-    text-align: center;
-  }
 }
 
 @media (max-width: 479px) {
+  h1 {
+    font-size: 28px;
+    line-height: 32px;
+    margin-top: 16px;
+  }
+  .tagline {
+    text-align: center;
+    padding-left: 0;
+  }
   .nav {
     padding-bottom: 15px;
   }
@@ -686,3 +694,16 @@ input:checked + .checkbox-span:hover {
   color:white;
 }
 
+.w-input, .w-select {
+  height: initial;
+  height: unset;
+}
+
+.light {
+  font-weight: 400;
+  color:rgba(0,0,0,0.56);
+}
+
+p, ul{
+  line-height: 1.2em;
+}

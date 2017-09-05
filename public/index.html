@@ -15,11 +15,11 @@
   <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">
-    WebFont.load({
-      google: {
-        families: ["Montserrat:300,300italic,700,700italic"]
-        }
-    });
+    // WebFont.load({
+    //   google: {
+    //     families: ["Montserrat:300,300italic,700,700italic"]
+    //     }
+    // });
     !function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
   </script>
   <link href="./images/harvey-needs.png" rel="shortcut icon" type="image/x-icon">
@@ -28,18 +28,18 @@
   <div class="nav">
     <div class="container nav-container w-clearfix">
       <a class="brand w-inline-block" href="index.html">
-        <div class="logo">Hurricane Harvey + needs MATCH</div>
+        <div class="logo">Hurricane Harvey + Needs Match</div>
       </a>
-      <div class="tagline">Helping hurricane victims find what they need by matching them with donors and resources.</div>
+      <div class="tagline">Personally matching hurricane victims with donors and resources.</div>
     </div>
   </div>
   <div class="w-tabs" data-duration-in="150" data-duration-out="150" data-easing="ease-out">
     <div class="container tabs-menu w-tab-menu">
       <a class="tab-link w-inline-block w-tab-link" data-w-tab="Harvey Victims">
-        <div class="text-block-2">I need help.</div>
+        <div class="text-block">I Need Help</div>
       </a>
       <a class="tab-link w-inline-block w-tab-link" data-w-tab="Harvey Helpers">
-        <div class="text-block">I want to help.</div>
+        <div class="text-block">I Want To Help</div>
       </a>
       <a class="tab-link w-inline-block w-tab-link" data-w-tab="Harvey SMS">
         <div class="text-block">SMS</div>
@@ -51,7 +51,7 @@
           <div class="container">
             <div class="w-form">
               <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="./api/v1/web/needs">
-                <p><b>We are very sorry for the loss you have experienced.</b></p>
+                <h4>We are very sorry for the loss you have experienced.</h4>
                 <p>Below, please let us know your <b>immediate</b> needs and how we can help provide some relief. Please give as much information as possible. This helps us match you with assistance.</p>
                 <h1 class="heading-2">Tell us how we can help...</h1>
                 <textarea class="text-field w-input" data-name="Other 2" id="other-2" name="Text_Input" maxlength="5000" placeholder="List your needs here..." required="required"></textarea>
@@ -88,58 +88,18 @@
           <div class="container">
             <div class="w-form">
               <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="./api/v1/web/offers" method="POST">
-                <p><b>Thank you for your willingness to provide direct assistance to those impacted by Hurricane Harvey in this incredible time of need.</b></p>
+                <h4>Thank you for your willingness to provide direct assistance to those impacted by Hurricane Harvey in this time of immense need.</h4>
                 <p>We are working with a team of social workers and professionals to meet the specific needs of our neighbors. You will make your donation <b>directly</b> to someone with needs like: clothes, food, medical necessities, ID replacement, car rentals, glasses, phone chargers, utility assistance, etc.</p>
-
-                <h1 class="heading-2">I can&nbsp;offer...</h1><label class="field-label" for="other">Select as many as you can</label>
-                <div class="filters" id="filters">
-                  <div class="button-group w-clearfix">
-                    <div class="filters-wrap">
-                      <div class="collection-list-wrapper w-dyn-list">
-                        <div class="collection-list-2 w-dyn-items">
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="child-care"><span class="checkbox-span">Child Care</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="clean-up"><span class="checkbox-span">Clean Up</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="clothing"><span class="checkbox-span">Clothing</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="demolition"><span class="checkbox-span">Demolition</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="financial-aid"><span class="checkbox-span">Financial Aid</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="food"><span class="checkbox-span">Food</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="housing"><span class="checkbox-span">Housing</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="insurance-help"><span class="checkbox-span">Insurance Help</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="medical-care"><span class="checkbox-span">Medical Care</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="medicine"><span class="checkbox-span">Medicine</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="pet-care"><span class="checkbox-span">Pet Care</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="transportation"><span class="checkbox-span">Transportation</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="volunteer"><span class="checkbox-span">Volunteering</span></label>
-                          <label class="button w-button"><input type="checkbox" name="Offer_Detail[]" value="water"><span class="checkbox-span">Water</span></label>
-                        </div>
-                        <div class="w-dyn-empty" style="display:none">
-                          <div>No items found.</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <label class="field-label" for="other">Specific skills or offers:</label>
-                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" placeholder="Example Text"></textarea>
-                <p class="light">Please note that many people in need have been out of work for a week or more due to the hurricane. In these circumstances, the most effective way you can help may be to cover their lost wages with a direct cash donation. Please let us know if you can give financially by selecting "Financial Aid". Our social workers are working hard to vet each request so you can give to those most in need.</p>
+                <h1 class="heading-2">I can contribute...</h1>
+                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" placeholder="e.g. Financial aid to support a family with $200/mo for 3 months."></textarea>
+                <p class="light">Many people affected by the hurricane have been out of work for a week or more. In many of these circumstances, the most effective way you can help cover their lost wages is to help them pay bills and purchase goods. Our social workers are working hard to vet each request so you can give directly to those most in need.</p>
                 <h1 class="heading-2">I am located...</h1>
                 <label class="field-label" for="phone">Cell Phone</label>
                 <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="Phone" placeholder="e.g. 713 555 1111" required="required" type="text">
-                <label class="field-label" for="email">Email (optional)</label>
+                <label class="field-label" for="email">Email</label>
                 <input class="text-field w-input" data-name="Email" id="email" name="Email" maxlength="256" placeholder="e.g. you@email.com" type="email">
-                <label class="field-label" for="zip">Current Zip Code:</label>
+                <label class="field-label" for="zip">Zip Code:</label>
                 <input class="text-field w-input" data-name="Zip" id="zip" maxlength="256" name="Zip" placeholder="e.g. 77004" required="required" type="text">
-                <label class="field-label" for="distance">I can travel:</label>
-                <select class="w-select" data-name="distance" id="distance" name="distance" required="required">
-                  <option value="9999">Any Distance</option>
-                  <option value="1">1 mi</option>
-                  <option value="5">5 mi</option>
-                  <option value="10">10 mi</option>
-                  <option value="25">25 mi</option>
-                  <option value="50">50 mi</option>
-                  <option value="100">100 mi</option>
-                  <option value="200">200 mi</option>
-                </select>
                 <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
               </form>
               <div class="w-form-done">

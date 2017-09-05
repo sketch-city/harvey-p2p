@@ -15,7 +15,10 @@ const twilioRoutes = require('./routes/api/v1/twilio')
 const webRoutes = require('./routes/api/v1/web')
 const app = express()
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())

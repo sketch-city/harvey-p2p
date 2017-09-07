@@ -156,10 +156,11 @@ function getLanguageString(language, title, data) {
 function matchYes(req, language) {
   var input = req.body.Body.toUpperCase().trim();
   var yes = getLanguageYes(language, true);
+  debug('matchYes, input:', input);
   if (_.isArray(yes)) {
     return _.contains(yes, input);
   } else {
-    return input === getLanguageYes(language);
+    return input === yes;
   }
 }
 
@@ -185,6 +186,7 @@ function step0(req, res){
 
 function step1(req, res){
   var language = req.cookies.language
+  debug(req.body);
   reply(req,res,{
     nextStep:"step2",
     message: getLanguageString(language, 'step2', {
@@ -230,10 +232,12 @@ function step3(req,res){
       message: getLanguageString(language, 'stepDone')
     })
   })
+  /*
   .catch(function(error){
     // TODO error handling
     next(error);
   });
+  */
 }
 
 // End steps in message dialog

@@ -1,5 +1,6 @@
 const requestPromise = require('request-promise');
 const uuidv4 = require('uuid/v4');
+const debug = require('debug')('sheeter');
 
 const postOptions = {
   method: 'POST',
@@ -80,15 +81,23 @@ function addToSheet(type, ...data){
   // Make options based on data and type.
   const requestOptions = makeRequestOptions(type, ...data);
 
+  debug('requestOptions:', requestOptions);
+
   // Make the request.
   return requestPromise(requestOptions)
     .catch(function(error){
       // Get the actual response to the post.
       // The Google app is weird and redirects the response location
       // for some reason.
-      return requestPromise({
-        uri: error.response.headers.location
-      })
+      if (error.response && error.response.statusCode === 302) {
+        return requestPromise({
+          uri: error.response.headers.location
+        })
+      }
+
+      // A different error occured
+      debug('error:', error);
+      throw error;
     });
 }
 

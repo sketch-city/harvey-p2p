@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express'),
   router = express.Router(),
   MessagingResponse = require('twilio').twiml.MessagingResponse,
@@ -35,6 +37,14 @@ const smsText = [
   }
 ]
 
+function formatPhoneNumber(input) {
+  var num = input.replace(/[^0-9]/g, '');
+
+  num = num.slice(-10);
+
+  return num.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+}
+
 /**
  * Send an SMS reply, including storing some data in a cookie, if provided
  * req Express request object
@@ -47,8 +57,10 @@ const smsText = [
  * opts.value Cookie value to store
  */
 function reply(req,res,opts){
-  if (opts.key !== undefined){
-    res.cookie(opts.key, opts.value,{"path":""})
+  if (opts.data !== undefined){
+    Object.keys(opts.data).forEach(key => {
+      res.cookie(key, opts.data[key], {"path": ""})
+    });
   }
   if (opts.nextStep === null){
     res.clearCookie("step")
@@ -169,48 +181,72 @@ function matchYes(req, language) {
 
 function step0(req, res){
   var language = getLanguageInit(req)
+
   if (language === null) {
     reply(req, res, {
       message: 'Accepted inputs: ' + getLanguageTriggers().join(', ')
     });
     return;
   }
-  debug('language:', language);
+
   reply(req,res,{
-    nextStep:"step1",
-    key: 'language',
-    value: language,
+    data: {
+      language
+    },
+    nextStep: "step1",
     message: getLanguageString(language, 'step1')
   });
 }
 
 function step1(req, res){
   var language = req.cookies.language
-  debug(req.body);
+  var sourceNumber = formatPhoneNumber(req.body.From);
+
   reply(req,res,{
-    nextStep:"step2",
+    data: {
+      step1info: req.body.Body
+    },
+    nextStep: "step2",
     message: getLanguageString(language, 'step2', {
-      phone: req.body.From,
+      phone: sourceNumber,
       yes: getLanguageYes(language)
     }),
-    key:"step1info",
-    value:req.body.Body
   })
 }
 
 function step2(req,res){
-  var language = req.cookies.language
-  var phoneNumber
-  if (matchYes(req, language)){
-    phoneNumber = req.body.From
-  } else {
-    phoneNumber = '[' + req.body.From + '] ' + req.body.Body
+  var language = req.cookies.language;
+  var sourceNumber = formatPhoneNumber(req.body.From);
+  var primaryNumber = sourceNumber;
+  var notes = '';
+  var input = req.body.Body.trim();
+
+  // if answer is just YES, store the formatted source number.
+  // Otherwise, if answer contains a proper phone number, store it as Phone
+  //   and store the original source in Notes field
+  //  If answer contains more than a phone number, then also store the extra text
+  //    in the Notes field
+
+  if (!matchYes(req, language)){
+    let match = input.match(/^[\(]*\d{3}[-\) ]*\d{3}[- ]*\d{4}$/);
+    if (match !== null && match[0] === input) {
+      // Single, seemingly valid number provided.
+      // Use it as primary number, and append source number to Notes
+      primaryNumber = formatPhoneNumber(input);
+      notes += 'SMS source number: ' + sourceNumber;
+    } else {
+      // Keep source number as primary, and store this response in notes
+      notes += "SMS response to phone prompt: \"" + input + "\"";
+    }
   }
+
   reply(req,res,{
-    nextStep:"step3",
+    data: {
+      step2info: primaryNumber,
+      notes
+    },
+    nextStep: "step3",
     message: getLanguageString(language, 'step3'),
-    key:"step2info",
-    value: phoneNumber
   })
 }
 
@@ -219,12 +255,14 @@ function step3(req,res){
   var phoneNumber = req.cookies.step2info;
   var needs = req.cookies.step1info;
   var language = req.cookies.language;
+  var notes = req.cookies.notes;
 
   need.addByPhone({
     Text_Input:   needs,
     Phone:        phoneNumber,
     Zip:          zipcode,
-    Language:     language
+    Language:     language,
+    Notes:        notes
   })
   .then(function(){
     reply(req,res,{

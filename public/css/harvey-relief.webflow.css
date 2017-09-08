@@ -638,6 +638,10 @@ input:checked + .checkbox-span:hover {
   flex: 0 0 100%;
 }
 
+#google_translate_element{
+  float:right;
+}
+
 @media (max-width: 991px) {
   .container {
     width: 100%;

@@ -2,48 +2,32 @@ const chai = require('chai'),
   chaiHttp = require('chai-http'),
   expect = chai.expect;
 
-const parseXml = require('xml2js').parseString;
-
 chai.use(chaiHttp);
 
 require('dotenv').config({path: __basedir + '/test/.env'});
 
-const app = require(__basedir + '/app');
+const app = require(__basedir + '/app'),
+  helper = require(__basedir + '/test/helper');
 
-function checkResponseBody(res, messageText) {
-  return parseXml(res.text, (err, result) => {
-    expect(result.Response.Message[0].Body[0]).to.equal(messageText);
-  });
-}
-
+var agent;
 
 describe('language selection', () => {
-  // Send NEED, expect "What do you need?"
-  it('english: NEED', () => {
-    return chai.request(app)
-      .post('/api/v1/twilio/message')
-      .type('form')
-      .send({
-        Body: "Need",
-      })
+  beforeEach(() => {
+    agent = chai.request.agent(app);
+  });
+  it('english', () => {
+    return helper.sendSMS(agent, "Need")
       .then(res => {
-        expect(res, 'response status').to.have.status(200);
-        expect(res.text, 'response text').not.to.be.empty;
-        return checkResponseBody(res, 'What do you need?');
+        return helper.checkSMSResponseBody(res, 
+          /What are your immediate needs/);
       });
   });
 
-  it('spanish: NECESITAR', () => {
-    return chai.request(app)
-      .post('/api/v1/twilio/message')
-      .type('form')
-      .send({
-        Body: "Necesitar",
-      })
+  it('spanish', () => {
+    return helper.sendSMS(agent, "Necesidad")
       .then(res => {
-        expect(res, 'response status').to.have.status(200);
-        expect(res.text, 'response text').not.to.be.empty;
-        return checkResponseBody(res, '¿Qué necesitas?');
+        return helper.checkSMSResponseBody(res, 
+          /¿Cuáles son sus necesidades inmediatas?/);
       });
   });
 });

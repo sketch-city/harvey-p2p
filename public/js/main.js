@@ -59,6 +59,13 @@ $(document).ready( function() {
       formData[entry.name] = entry.value;
     });
 
+    // Get current language name
+    var googtrans = getCookie('googtrans');
+    if (googtrans !== null) {
+      var languageCode = googtrans.split('/')[2];
+      formData.Language = languageCodes[languageCode] || 'Unknown';
+    }
+
     return formData;
   }
 
@@ -102,4 +109,23 @@ $(document).ready( function() {
     ga('send', 'pageview');
   }
 
+  /**
+   * https://stackoverflow.com/a/22852843
+   */
+  function getCookie(c_name) {
+    var c_value = " " + document.cookie;
+    var c_start = c_value.indexOf(" " + c_name + "=");
+    if (c_start == -1) {
+        c_value = null;
+    }
+    else {
+        c_start = c_value.indexOf("=", c_start) + 1;
+        var c_end = c_value.indexOf(";", c_start);
+        if (c_end == -1) {
+            c_end = c_value.length;
+        }
+        c_value = unescape(c_value.substring(c_start,c_end));
+    }
+    return c_value;
+  };
 });

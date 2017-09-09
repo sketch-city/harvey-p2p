@@ -1,6 +1,20 @@
 $(document).ready( function() {
 
-  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email', 'Housing'];
+  var expectedKeys = [
+    'Text_Input',
+    'Phone',
+    'Zip',
+    'Zip_Home',
+    'Rent',
+    'Offer_Type',
+    'Offer_Detail',
+    'Need_Type',
+    'Needs_Detail',
+    'Language',
+    'Name',
+    'Email',
+    'Housing',
+  ];
 
   initForm();
   initRouting();
@@ -10,6 +24,7 @@ $(document).ready( function() {
 
     $('input[name=Phone]').mask('(000) 000-0000');
     $('input[name=Zip]').mask('00000');
+    $('input[name=Zip_Home]').mask('00000');
 
     // function to submit needs form
     $('form').submit(function(event) {
@@ -45,17 +60,25 @@ $(document).ready( function() {
     var formDataArray = $form.serializeArray();
     var formData = {};
     Webflow._.each(formDataArray, function(entry){
+      /**
+       * Syntax for naming inputs such that they will be concatenated into a
+       * single field: inputs with name="FieldName[]" -> field FieldName
+       */
       if (entry.name.substr(-2) === '[]') {
         entry.name = entry.name.substr(0, entry.name.length - 2);
         formData[entry.name] = formData[entry.name] || '';
         formData[entry.name] += (formData[entry.name] && ', ') + entry.value;
         return;
       }
+      /**
+       * Any unexpected form fields will get appended to the Notes field
+       */
       if (expectedKeys.indexOf(entry.name) < 0) {
         formData.Notes = formData.Notes || '';
         formData.Notes += (formData.Notes && ', ') + entry.name + ': ' + entry.value;
         return;
       }
+
       formData[entry.name] = entry.value;
     });
 

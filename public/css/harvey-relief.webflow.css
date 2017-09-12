@@ -3,7 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   line-height: 1.5;
-  color: #24292e;
+  color: rgba(0,0,0,.87);
 }
 
 .hero {
@@ -23,6 +23,7 @@ body {
 }
 
 .footer {
+  position: relative;
   padding: 50px 10px;
   background-color: #fff;
   text-align: center;
@@ -580,10 +581,10 @@ input:checked + .checkbox-span:hover {
   color:white;
 }
 
-/*.w-input, .w-select {
+.w-input, .w-select {
   height: initial;
   height: unset;
-}*/
+}
 
 .light {
   font-weight: 400;
@@ -664,6 +665,9 @@ input:checked + .checkbox-span:hover {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
   }
   .search-wrapper {
     margin-top: 20px;
@@ -676,8 +680,14 @@ input:checked + .checkbox-span:hover {
     text-align: center;
     padding-left: 0;
   }
+  .logo{
+    text-align: center;
+  }
   #google_translate_element{
     padding-top: 10px;
+  }
+  .legal{
+    font-size: .6em;
   }
 
 }

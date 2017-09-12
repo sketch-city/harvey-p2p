@@ -1,6 +1,19 @@
 $(document).ready( function() {
 
-  var expectedKeys = ['Text_Input', 'Phone', 'Zip', 'Offer_Type', 'Offer_Detail', 'Need_Type', 'Needs_Detail', 'Language', 'Name', 'Email', 'Housing'];
+  var expectedKeys = [
+    'Text_Input',
+    'Phone',
+    'Zip',
+    'Zip_Home',
+    'Offer_Type',
+    'Offer_Detail',
+    'Need_Type',
+    'Needs_Detail',
+    'Language',
+    'Name',
+    'Email',
+    'Housing',
+  ];
 
   initForm();
   initRouting();
@@ -10,6 +23,7 @@ $(document).ready( function() {
 
     $('input[name=Phone]').mask('(000) 000-0000');
     $('input[name=Zip]').mask('00000');
+    $('input[name=Zip_Home]').mask('00000');
 
     // function to submit needs form
     $('form').submit(function(event) {
@@ -45,19 +59,34 @@ $(document).ready( function() {
     var formDataArray = $form.serializeArray();
     var formData = {};
     Webflow._.each(formDataArray, function(entry){
+      /**
+       * Syntax for naming inputs such that they will be concatenated into a
+       * single field: inputs with name="FieldName[]" -> field FieldName
+       */
       if (entry.name.substr(-2) === '[]') {
         entry.name = entry.name.substr(0, entry.name.length - 2);
         formData[entry.name] = formData[entry.name] || '';
         formData[entry.name] += (formData[entry.name] && ', ') + entry.value;
         return;
       }
+      /**
+       * Any unexpected form fields will get appended to the Notes field
+       */
       if (expectedKeys.indexOf(entry.name) < 0) {
         formData.Notes = formData.Notes || '';
         formData.Notes += (formData.Notes && ', ') + entry.name + ': ' + entry.value;
         return;
       }
+
       formData[entry.name] = entry.value;
     });
+
+    // Get current language name
+    var googtrans = getCookie('googtrans');
+    if (googtrans !== null) {
+      var languageCode = googtrans.split('/')[2];
+      formData.Language = languageCodes[languageCode] || 'Unknown';
+    }
 
     return formData;
   }
@@ -102,4 +131,23 @@ $(document).ready( function() {
     ga('send', 'pageview');
   }
 
+  /**
+   * https://stackoverflow.com/a/22852843
+   */
+  function getCookie(c_name) {
+    var c_value = " " + document.cookie;
+    var c_start = c_value.indexOf(" " + c_name + "=");
+    if (c_start == -1) {
+        c_value = null;
+    }
+    else {
+        c_start = c_value.indexOf("=", c_start) + 1;
+        var c_end = c_value.indexOf(";", c_start);
+        if (c_end == -1) {
+            c_end = c_value.length;
+        }
+        c_value = unescape(c_value.substring(c_start,c_end));
+    }
+    return c_value;
+  };
 });

@@ -11,7 +11,7 @@
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="css/harvey-relief.webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/harvey-relief.webflow-min.css" rel="stylesheet" type="text/css">
   <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">
@@ -30,7 +30,10 @@
       <a class="brand w-inline-block" href="index.html">
         <div class="logo">Hurricane Harvey + Needs Match</div>
       </a>
-      <div class="tagline">Personally matching hurricane victims with donors and resources.</div>
+      <div class="tagline">
+        <div>Personally matching hurricane victims with donors and resources.</div>
+        <div id="google_translate_element"></div>
+      </div>
     </div>
   </div>
   <div class="w-tabs" data-duration-in="150" data-duration-out="150" data-easing="ease-out">
@@ -50,11 +53,11 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="./api/v1/web/needs">
+              <form class="form" data-name="Need Form" id="wf-form-Need-Form" name="wf-form-Need-Form" action="/api/v1/web/needs">
                 <h4>We are very sorry for the loss you have experienced.</h4>
                 <p>Below, please let us know your <b>immediate</b> needs and how we can help provide some relief. Please give as much information as possible. This helps us match you with assistance.</p>
                 <h1 class="heading-2">Tell us how we can help...</h1>
-                <textarea class="text-field w-input" data-name="Other 2" id="other-2" name="Text_Input" maxlength="5000" placeholder="List your needs here..." required="required"></textarea>
+                <textarea class="text-field w-input" data-name="Other 2" id="other-2" name="Text_Input" maxlength="5000" required></textarea>
                 <p class="light">Be specific! Make sure to tell us if any of these apply:</p>
                 <ul class="light">
                   <li>Do you need help in Spanish or another language?</li>
@@ -63,18 +66,37 @@
                   <li>Do you have dependents or require financial assistance?</li>
                 </ul>
                 <h1 class="heading-2">Here's how to contact me...</h1>
-                <label class="field-label" for="phone-2">Cell Phone</label>
-                <input class="text-field w-input" data-name="Phone 2" id="phone-2" name="Phone" maxlength="256" placeholder="e.g. 713 555 1111" required="required" type="text">
-                <label class="field-label" for="email-2">Email (optional)</label>
-                <input class="text-field w-input" data-name="Email 2" id="email-2" name="Email" maxlength="256" placeholder="e.g. you@email.com" type="email">
-                <label class="field-label" for="zip-2">Current Zip Code:</label>
-                <input class="text-field w-input" data-name="Zip 2" id="zip-2" name="Zip" maxlength="256" placeholder="e.g. 77004" required="required" type="text">
-                <label class="field-label" for="housing-2">Housing Situation:</label>
-                <input class="text-field w-input" data-name="Housing 2" id="housing-2" name="Housing" maxlength="256" placeholder="e.g. at George R Brown Shelter -OR- at Home w/ flood damage" type="text">
+                <div class="small-fields">
+                  <div class="field-group">
+                    <label class="field-label" for="name-2">Name <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Name 2" id="name-2" name="Name" maxlength="256" type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="email-2">Email <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Email 2" id="email-2" name="Email" maxlength="256" type="email">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="phone-2">Phone</label>
+                    <input class="text-field w-input" data-name="Phone 2" id="phone-2" name="Phone" maxlength="256" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="zip-2">Home Zip Code:</label>
+                    <input class="text-field w-input" data-name="Zip Home 2" id="zip-home-2" name="Zip_Home" maxlength="256" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="zip-2">Current Zip Code:</label>
+                    <input class="text-field w-input" data-name="Zip 2" id="zip-2" name="Zip" maxlength="256" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="housing-2">Housing Situation: <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Housing 2" id="housing-2" name="Housing" maxlength="256" type="text">
+                    <div class="field-sublabel">e.g. at shelter / at home w flood damage / other</div>
+                  </div>
+                </div>
                 <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
               </form>
               <div class="w-form-done">
-                <div class="success">Thank you! Your submission has been received!<br>Someone will contact you on your cellphone when a match is found.</div>
+                <div class="success">Thank you! Your submission has been received!<br>Someone will contact you when a match is found.</div>
               </div>
               <div class="w-form-fail">
                 <div>Oops! Something went wrong while submitting the form.</div>
@@ -87,23 +109,36 @@
         <div class="section">
           <div class="container">
             <div class="w-form">
-              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="./api/v1/web/offers" method="POST">
+              <form class="form" data-name="Helper Form" id="wf-form-Helper-Form" name="wf-form-Helper-Form" action="/api/v1/web/offers" method="POST">
                 <h4>Thank you for your willingness to provide direct assistance to those impacted by Hurricane Harvey in this time of immense need.</h4>
                 <p>We are working with a team of social workers and professionals to meet the specific needs of our neighbors. You will make your donation <b>directly</b> to someone with needs like: clothes, food, medical necessities, ID replacement, car rentals, glasses, phone chargers, utility assistance, etc.</p>
                 <h1 class="heading-2">I can contribute...</h1>
-                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" placeholder="e.g. Financial aid to support a family with $200/mo for 3 months."></textarea>
+                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" required></textarea>
+                <div class="field-sublabel">e.g. $500 to support a family / 6 months of support for a family / other</div>
                 <p class="light">Many people affected by the hurricane have been out of work for a week or more. In many of these circumstances, the most effective way you can help cover their lost wages is to help them pay bills and purchase goods. Our social workers are working hard to vet each request so you can give directly to those most in need.</p>
                 <h1 class="heading-2">I am located...</h1>
-                <label class="field-label" for="phone">Cell Phone</label>
-                <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="Phone" placeholder="e.g. 713 555 1111" required="required" type="text">
-                <label class="field-label" for="email">Email</label>
-                <input class="text-field w-input" data-name="Email" id="email" name="Email" maxlength="256" placeholder="e.g. you@email.com" type="email">
-                <label class="field-label" for="zip">Zip Code:</label>
-                <input class="text-field w-input" data-name="Zip" id="zip" maxlength="256" name="Zip" placeholder="e.g. 77004" required="required" type="text">
+                <div class="small-fields">
+                  <div class="field-group">
+                    <label class="field-label" for="name">Name <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Name" id="name" name="Name" maxlength="256" type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="email">Email <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Email" id="email" name="Email" maxlength="256" type="email">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="phone">Phone</label>
+                    <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="Phone" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="zip">Zip Code:</label>
+                    <input class="text-field w-input" data-name="Zip" id="zip" maxlength="256" name="Zip" required type="text">
+                  </div>
+                </div>
                 <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
               </form>
               <div class="w-form-done">
-                <div class="success">Thank you! Your submission has been received!<br>Someone will contact you on your cell phone when your service is requested.</div>
+                <div class="success">Thank you! Your submission has been received!<br>Someone will contact you when your service is requested.</div>
               </div>
               <div class="w-form-fail">
                 <div>Oops! Something went wrong while submitting the form.</div>
@@ -115,18 +150,20 @@
       <div class="w-tab-pane" data-w-tab="Harvey SMS">
         <div class="section">
           <div class="container">
-          <h1>SMS instructions</h1>
+          <h1>SMS Submission</h1>
           <p>Text the word NEED to <a href="tel:(832)-639-1127">(832)-639-1127</a> to submit via SMS.</p>
           <p>Texto la palabra NECESIDAD de <a href="tel:(832)-639-1127">(832)-639-1127</a> para enviar vía SMS.</p>
+          <p>After sending your text, you will be prompted for additional information.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="section-3"></div>
+  <div class="section-3"><a class="photo-cred" href="http://www.trishbadger.com" target="_blank">Photo by Trish Badger Photography</a></div>
   <div class="footer">
     <div class="container">
       <div>Created with <span class="text-span">♥</span> for Houston.</div>
+      <div class="legal"><p>Information submitted to my.HarveyNeeds.org will not be sold to third parties. Information will only be shared as needed to fulfill your request.</p></div>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" type="text/javascript"></script>
@@ -136,7 +173,13 @@
   <script src="js/webflow.js" type="text/javascript"></script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
   <script src="https://npmcdn.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
+  <script type="text/javascript" src="./js/languages.js"></script>
   <script type="text/javascript" src="./js/main.js"></script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT, gaTrack: true, gaId: 'UA-105727042-8'}, 'google_translate_element');
+    }
+    </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
 <!-- vim: set ts=2 sw=2 sts=2: -->

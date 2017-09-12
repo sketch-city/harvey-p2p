@@ -5,7 +5,6 @@ $(document).ready( function() {
     'Phone',
     'Zip',
     'Zip_Home',
-    'Rent',
     'Offer_Type',
     'Offer_Detail',
     'Need_Type',

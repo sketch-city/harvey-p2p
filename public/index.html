@@ -57,7 +57,7 @@
                 <h4>We are very sorry for the loss you have experienced.</h4>
                 <p>Below, please let us know your <b>immediate</b> needs and how we can help provide some relief. Please give as much information as possible. This helps us match you with assistance.</p>
                 <h1 class="heading-2">Tell us how we can help...</h1>
-                <textarea class="text-field w-input" data-name="Other 2" id="other-2" name="Text_Input" maxlength="5000" placeholder="List your needs here..." required="required"></textarea>
+                <textarea class="text-field w-input" data-name="Other 2" id="other-2" name="Text_Input" maxlength="5000" required></textarea>
                 <p class="light">Be specific! Make sure to tell us if any of these apply:</p>
                 <ul class="light">
                   <li>Do you need help in Spanish or another language?</li>
@@ -67,27 +67,31 @@
                 </ul>
                 <h1 class="heading-2">Here's how to contact me...</h1>
                 <div class="small-fields">
-                  <div class="field-group long"><label class="field-label" for="name-2">Name</label>
-                  <input class="text-field w-input" data-name="Name 2" id="name-2" name="Name" maxlength="256" placeholder="First Last" type="text"></div>
-                  <div class="field-group"><label class="field-label" for="phone-2">Cell Phone</label>
-                  <input class="text-field w-input" data-name="Phone 2" id="phone-2" name="Phone" maxlength="256" placeholder="e.g. (713) 555-1111" required="required" type="text"></div>
-                  <div class="field-group"><label class="field-label" for="email-2">Email</label>
-                  <input class="text-field w-input" data-name="Email 2" id="email-2" name="Email" maxlength="256" placeholder="e.g. you@email.com" type="email"></div>
-                  <div class="field-group"><label class="field-label" for="zip-2">Home Zip Code:</label>
-                  <input class="text-field w-input" data-name="Zip Home 2" id="zip-home-2" name="Zip_Home" maxlength="256" placeholder="e.g. 77004" required="required" type="text">
+                  <div class="field-group">
+                    <label class="field-label" for="name-2">Name <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Name 2" id="name-2" name="Name" maxlength="256" type="text">
                   </div>
                   <div class="field-group">
-                    <label class="field-label" for="rent">Rent / Own?</label>
-                    <select class="w-select" data-name="Rent?" id="rent" name="Rent" required="required">
-                      <option value="" selected>- Please select one -</option>
-                      <option value="1">Rent</option>
-                      <option value="0">Own</option>
-                    </select>
+                    <label class="field-label" for="email-2">Email <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Email 2" id="email-2" name="Email" maxlength="256" type="email">
                   </div>
-                  <div class="field-group"><label class="field-label" for="zip-2">Current Zip Code:</label>
-                  <input class="text-field w-input" data-name="Zip 2" id="zip-2" name="Zip" maxlength="256" placeholder="e.g. 77008" required="required" type="text"></div>
-                  <div class="field-group"><label class="field-label" for="housing-2">Housing Situation:</label>
-                  <input class="text-field w-input" data-name="Housing 2" id="housing-2" name="Housing" maxlength="256" placeholder="e.g. at shelter / at home w flood damage / other" type="text"></div>
+                  <div class="field-group">
+                    <label class="field-label" for="phone-2">Cell Phone</label>
+                    <input class="text-field w-input" data-name="Phone 2" id="phone-2" name="Phone" maxlength="256" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="zip-2">Home Zip Code:</label>
+                    <input class="text-field w-input" data-name="Zip Home 2" id="zip-home-2" name="Zip_Home" maxlength="256" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="zip-2">Current Zip Code:</label>
+                    <input class="text-field w-input" data-name="Zip 2" id="zip-2" name="Zip" maxlength="256" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="housing-2">Housing Situation: <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Housing 2" id="housing-2" name="Housing" maxlength="256" type="text">
+                    <div class="field-sublabel">e.g. at shelter / at home w flood damage / other</div>
+                  </div>
                 </div>
                 <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
               </form>
@@ -109,15 +113,28 @@
                 <h4>Thank you for your willingness to provide direct assistance to those impacted by Hurricane Harvey in this time of immense need.</h4>
                 <p>We are working with a team of social workers and professionals to meet the specific needs of our neighbors. You will make your donation <b>directly</b> to someone with needs like: clothes, food, medical necessities, ID replacement, car rentals, glasses, phone chargers, utility assistance, etc.</p>
                 <h1 class="heading-2">I can contribute...</h1>
-                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" placeholder="e.g. $500 financial aid to support a family / I would like to support a family for 6 months / other"></textarea>
+                <textarea class="text-field w-input" data-name="other" id="other" maxlength="5000" name="Text_Input" required></textarea>
+                <div class="field-sublabel">e.g. $500 to support a family / 6 months of support for a family / other</div>
                 <p class="light">Many people affected by the hurricane have been out of work for a week or more. In many of these circumstances, the most effective way you can help cover their lost wages is to help them pay bills and purchase goods. Our social workers are working hard to vet each request so you can give directly to those most in need.</p>
                 <h1 class="heading-2">I am located...</h1>
-                <label class="field-label" for="phone">Cell Phone</label>
-                <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="Phone" placeholder="e.g. 713 555 1111" required="required" type="text">
-                <label class="field-label" for="email">Email</label>
-                <input class="text-field w-input" data-name="Email" id="email" name="Email" maxlength="256" placeholder="e.g. you@email.com" type="email">
-                <label class="field-label" for="zip">Zip Code:</label>
-                <input class="text-field w-input" data-name="Zip" id="zip" maxlength="256" name="Zip" placeholder="e.g. 77004" required="required" type="text">
+                <div class="small-fields">
+                  <div class="field-group">
+                    <label class="field-label" for="name">Name <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Name" id="name" name="Name" maxlength="256" type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="email">Email <span>(optional)</span></label>
+                    <input class="text-field w-input" data-name="Email" id="email" name="Email" maxlength="256" type="email">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="phone">Cell Phone</label>
+                    <input class="text-field w-input" data-name="phone" id="phone" maxlength="256" name="Phone" required type="text">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="zip">Zip Code:</label>
+                    <input class="text-field w-input" data-name="Zip" id="zip" maxlength="256" name="Zip" required type="text">
+                  </div>
+                </div>
                 <input class="button submit w-button" data-wait="Please wait..." type="submit" value="Submit">
               </form>
               <div class="w-form-done">

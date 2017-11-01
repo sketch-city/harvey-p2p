@@ -8,7 +8,7 @@ const express = require('express'),
   handlebars = require('handlebars'),
   _ = require('underscore');
 
-const { need } = require(__basedir + '/helpers/sheeter');
+const { need } = require(__basedir + '/helpers/zendesk');
 
 const smsText = [
   {

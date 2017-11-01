@@ -1,6 +1,6 @@
 const express = require('express'),
   router = express.Router(),
-  { need, offer } = require('../../../helpers/sheeter');
+  { need, offer } = require('../../../helpers/zendesk');
 
 function setRoute(route, handler){
   return router.post(route, function(req, res, next){

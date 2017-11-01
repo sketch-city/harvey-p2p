@@ -1,3 +1,4 @@
+const requestPromise = require('request-promise');
 const debug = require('debug')('hnp2p:zendesk');
 
 const postOptions = {
@@ -60,7 +61,7 @@ const FIELD_MAPPINGS = {
 //   - Disable "Ask users to register"
 // See Managing end-user settings in the Zendesk Support Help Center.
 
-function makeRequestOptions(postType, ...data){
+function makeRequestOptions(postType, source, ...data){
   // We want to set the following:
   // If available, set email; otherwise leave empty
   // + Phone number
@@ -151,17 +152,22 @@ function addItem(postType, source, ...data) {
       debug('error:', error);
       throw error;
     });
+}
 
+function genAddItem(postType, source) {
+  return (...data) => {
+    return addItem(postType, source, ...data);
+  };
 }
 
 // Fulfill the same contract provided by helpers/sheeter
 module.exports = {
   need: {
-    addByPhone: addItem(NEED, PHONE),
-    addByWeb: addItem(NEED, WEB),
+    addByPhone: genAddItem(NEED, PHONE),
+    addByWeb: genAddItem(NEED, WEB),
   },
   offer: {
-    addByPhone: addItem(OFFER, PHONE),
-    addByWeb: addItem(OFFER, WEB),
+    addByPhone: genAddItem(OFFER, PHONE),
+    addByWeb: genAddItem(OFFER, WEB),
   },
 }

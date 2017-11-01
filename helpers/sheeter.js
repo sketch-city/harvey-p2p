@@ -1,6 +1,6 @@
 const requestPromise = require('request-promise');
 const uuidv4 = require('uuid/v4');
-const debug = require('debug')('sheeter');
+const debug = require('debug')('hnp2p:sheeter');
 
 const postOptions = {
   method: 'POST',
